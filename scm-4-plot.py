@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import rc
 #rc('font',family='serif')
 #rc('text',usetex = True)
-from svp import svp as svp
+#from svp import svp as svp
 import matplotlib as mpl
 mpl.use('agg')
 
@@ -13,32 +13,38 @@ import getpass
 import matplotlib.pyplot as plt
 #import pylab as plt
 
-username=getpass.getuser()
+#username=getpass.getuser()
+## loc of data: /home/ezri/scm_output
 
+
+## bottom part of script works
+"""
 def plot_model_run():
     u=2.5 # m/s
     # create a patch
     tau=6000.
     rt=tau
     t=np.linspace(0,rt,100)
-    hill=tau*0.6/(2.*np.pi)*(1.-np.cos(2.*np.pi/tau*t))/1000.
+    #hill=tau*0.6/(2.*np.pi)*(1.-np.cos(2.*np.pi/tau*t))/1000.
     t=(t+10)*u/1000.
     t=np.append(t,t[::-1])
-    hill=np.append(hill,np.zeros((len(hill),1)))
+    #hill=np.append(hill,np.zeros((len(hill),1)))
     l1=len(t)
     pgon=np.zeros((l1,2))
     pgon[:,0]=t
-    pgon[:,1]=hill    
-    pgon1=plt.Polygon(pgon,color='r',alpha=1)
-    pgon2=plt.Polygon(pgon,color='r',alpha=1)
-    pgon3=plt.Polygon(pgon,color='r',alpha=1)
-    pgon4=plt.Polygon(pgon,color='r',alpha=1)
+    #pgon[:,1]=hill    
+    #pgon1=plt.Polygon(pgon,color='r',alpha=1)
+    #pgon2=plt.Polygon(pgon,color='r',alpha=1)
+    #pgon3=plt.Polygon(pgon,color='r',alpha=1)
+    #pgon4=plt.Polygon(pgon,color='r',alpha=1)
     
-    outputDir='/tmp/' + username + '/'
-    fileName=outputDir + 'output.nc'
+    #outputDir='/tmp/' + username + '/'
+    #fileName=outputDir + 'output.nc'
     
-    nc=Dataset(fileName)
+    #nc=Dataset(fileName)
+    nc = Dataset('/home/ezri/scm_output/output.nc')
     
+
     time=nc['time'][:]*u/1000.*60.
     z=nc['z'][:]
     q=nc['q'][:,:,:]
@@ -54,7 +60,7 @@ def plot_model_run():
     plt.text(0.1,0.9,'(a) CDNC',color='white',transform=ax.transAxes)
     cbar=plt.colorbar()
     cbar.set_label('number of cloud drops (cm$^{-3}$)')
-    ax.add_patch(pgon1)
+    #ax.add_patch(pgon1)
     
     ax=plt.subplot(222)
     plt.pcolor(time/60,z/1000.,q[:,:,15].T*1000.)
@@ -63,7 +69,7 @@ def plot_model_run():
     plt.text(0.1,0.9,'(b) $q_c$',color='white',transform=ax.transAxes)
     cbar=plt.colorbar()
     cbar.set_label('mass of cloud drops (g kg$^{-1}$)')
-    ax.add_patch(pgon2)
+    #ax.add_patch(pgon2)
     
     ax=plt.subplot(223)
     plt.pcolor(time/60,z/1000.,q[:,:,23].T*1000.)
@@ -72,7 +78,7 @@ def plot_model_run():
     plt.text(0.1,0.9,'(c) $q_r$',color='white',transform=ax.transAxes)
     cbar=plt.colorbar()
     cbar.set_label('mass of rain drops (g kg$^{-1}$)')
-    ax.add_patch(pgon3)
+    #ax.add_patch(pgon3)
     
     ax=plt.subplot(224)
     plt.pcolor(time/60,z/1000.,q[:,:,30].T/1000.)
@@ -81,7 +87,7 @@ def plot_model_run():
     plt.text(0.1,0.9,'(d) $N_{ice}$',color='white',transform=ax.transAxes)
     cbar=plt.colorbar()
     cbar.set_label('number of ice crystals (L$^{-1}$)')
-    ax.add_patch(pgon4)
+    #ax.add_patch(pgon4)
 
 #     fig2=plt.figure()
 #     plt.plot(time/60,np.sum(nc['precip'][:,0,0:2],axis=1))
@@ -92,6 +98,33 @@ def plot_model_run():
     nc.close()
     #plt.show()
     
-    fig.savefig('/tmp/' + username + '/scm_plot.png',format='png')
-    
-    
+    #fig.savefig('/tmp/' + username + '/scm_plot.png',format='png')
+    fig.savefig('/home/ezri/scm_output/scm_plot.png',format='png')
+"""
+   
+nc = Dataset('/home/ezri/scm_output/output.nc')
+
+
+u=2.5 # m/s
+time=nc['time'][:]*u/1000.*60.
+z=nc['z'][:]
+q=nc['q'][:,:,:]
+
+m1=np.max(q[0,:,14]/1.e6)
+#plt.ion()
+fig=plt.figure(figsize=(12,6))     
+#ax=plt.subplot(221)
+plt.pcolor(time/60,z/1000.,q[:,:,14].T/1.e6)
+plt.xlabel('distance (km)')
+plt.ylabel('z (km)')
+plt.clim((0,m1))
+#plt.text(0.1,0.9,'(a) CDNC',color='white',transform=ax.transAxes)
+cbar=plt.colorbar()
+cbar.set_label('number of cloud drops (cm$^{-3}$)')
+#ax.add_patch(pgon1)
+
+nc.close()
+plt.savefig('/home/ezri/scm_output/scm_plot.png', bbox_inches='tight')
+
+
+ 
