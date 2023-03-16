@@ -32,7 +32,7 @@ else:
 
 """
 
-### actual loop for opening data + extracing it
+### function for extracing data from vid processed script
 
 def temp_list(num, loc, name):
     data_list = []
@@ -41,26 +41,57 @@ def temp_list(num, loc, name):
             data = np.loadtxt(loc + name + str(i+1)+'_data.txt')  ## open each file
             rows = len(data)
             for j in range(rows):
-                value = data[j]
-                if value < 0:
-                    data_list.append(value)
+                #value = data[j]
+                #if value < 0:
+                data_list.append(data[j])
     return data_list
 
+## this is just raw list of values (not cleaned)
 palma_temps = temp_list(37, '/home/ezri/lab_things/processed/palma/', 'palma-')
 pure_40_temps = temp_list(10, '/home/ezri/lab_things/processed/pure/', 'pure-40_')
 pure_42_temps = temp_list(26, '/home/ezri/lab_things/processed/pure/', 'pure-42_')
 pure_45_temps = temp_list(2, '/home/ezri/lab_things/processed/pure/', 'pure-45_')
 
 collated_data = pd.DataFrame()
-collated_data.insert(0,'palma', palma_temps)
-collated_data['pure-40'] = pd.Series(pure_40_temps)
+collated_data['palma'] = pd.Series(palma_temps)   # just add columns individually
+collated_data['pure-40'] = pd.Series(pure_40_temps)   # in this format as they are different lengths
 collated_data['pure-42'] = pd.Series(pure_42_temps)
 collated_data['pure-45'] = pd.Series(pure_45_temps)
 
+pure_temps = pure_40_temps + pure_42_temps + pure_45_temps
 
-collated_data.to_csv('/home/ezri/lab_things/processed/freeze_temps.csv', mode='w')
+#  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ # 
+# new function for cleaning data, giving us: sd / mean / median / cleaned list
+def cleaning_list(raw_list):
+    sd = np.std(raw_list)
+    mean = np.mean(raw_list)
+    med = np.median(raw_list)
+    clean_list = []
+    upper = mean + sd*3
+    lower = mean - sd*3
+    for i in range(len(raw_list)):
+        num = raw_list[i]
+        if num < upper and num > lower:
+            clean_list.append(num)
+    return sd , mean , med, clean_list
+
+palma_sd, palma_mean, palma_med, palma_cleaned = cleaning_list(palma_temps)
+pure_sd, pure_mean, pure_med , pure_cleaned = cleaning_list(pure_temps)
+
+#index = ['palma','pure']
+extra_info = pd.DataFrame(index = ['palma','pure'])
+extra_info.insert(0,'sd',[palma_sd, pure_sd])
+extra_info.insert(1,'mean',[palma_mean, pure_mean])
+extra_info.insert(2,'median',[palma_med, pure_med])
+extra_info.insert(3,'n_values',[len(palma_cleaned), len(pure_cleaned)])
+
+collated_data['palma_clean'] = pd.Series(palma_cleaned)
+collated_data['pure_clean'] = pd.Series(pure_cleaned)
+
+#collated_data.to_csv('/home/ezri/lab_things/processed/freeze_temps.csv', mode='w')
+extra_info.to_csv('/home/ezri/lab_things/processed/extra_info.csv', mode='w')
 
 ## next step --> transform these numbers into inp conc for just pure + palma
 
-
+## want other csv file of mean / median / standard deviation
     
