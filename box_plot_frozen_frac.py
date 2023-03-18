@@ -27,20 +27,26 @@ palma_froze = main_data['palma_froz_frac'][:palma_n_values]
 pure_froze = main_data['pure_froz_frac'][:pure_n_values]
 
 #plt.figure()
-#fig, ax = plt.subplots()
-fig, (ax_main, ax_hist) = plt.subplots(2, sharex=True,gridspec_kw={"height_ratios": (0.85, 0.15)})
+#fig, ax = plt.subplots() sharex=True,
+fig, (ax_main, ax_hist) = plt.subplots(2, gridspec_kw={"height_ratios": (0.90, 0.1)})
 #plt.xlim(-5,-45)
 ax_main.set_xlim(-5,-45)
 ax_main.set_ylim(-0.05,1.05)
+ax_hist.set_xlim(-5,-45)
+#ax_main.set_xticks([-5, -10, -15, -20,-25,-30,-35,-40,-45])
 
 ## want x = temp // y = frozen frac
 ax_main.plot(palma_temps, palma_froze,color = 'black', label = 'La Palma')
 ax_main.plot(pure_temps, pure_froze,color = 'grey', label = 'Pure')
 
-ax_hist.boxplot(palma_temps)
-ax_hist.boxplot(pure_temps)
+ax_hist.axis('off')
+box = ax_hist.boxplot([pure_temps, palma_temps], vert=False, showfliers=False, notch=True, patch_artist=True)
+#ax_hist.boxplot(pure_temps, vert=False)
 
+for patch, color in zip(box['boxes'], ['grey','black']):
+    patch.set_facecolor(color)
 
+#ax_main.set_xticks(ax_main.get_xticks())
 
 """
 ### this is coords for where want make lines
@@ -61,6 +67,7 @@ palma_25_axis = (-24.61,-0.05)
 pure_25_line = (-29.35,0.25)
 pure_25_axis = (-29.35,-0.05)
 
+coords = ax_main.transDat
 
 palma_50_horiz = ConnectionPatch(xyA=half, coordsA= ax.transData ,xyB=palma_50_line, linestyle = '--', color = 'black', alpha = 0.5)
 palma_50_vert = ConnectionPatch(xyA=palma_50_line, coordsA= ax.transData ,xyB=palma_50_axis, linestyle = '--', color = 'black', alpha = 0.5)
@@ -90,9 +97,9 @@ pu_5 = ax.add_artist(pure_25_horiz)
 pu_6 = ax.add_artist(pure_25_vert)
 """
 
-plt.xlabel('Temperature ($^\circ$C)')
-plt.ylabel('Frozen fraction')
-plt.legend()
+ax_main.set_xlabel('Temperature ($^\circ$C)')
+ax_main.set_ylabel('Frozen fraction')
+ax_main.legend()
 
 
 plt.savefig('/home/ezri/lab_things/froze_fraction.png')
