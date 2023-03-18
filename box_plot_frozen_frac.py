@@ -49,7 +49,38 @@ for patch, color in zip(box['boxes'], ['grey','black']):
 #ax_main.set_xticks(ax_main.get_xticks())
 
 
-### this is coords for where want make lines
+## ## percentiles dictionary ## ##
+palma_ls = ['palma_50','palma_75','palma_25']
+pure_ls = ['pure_50','pure_75','pure_25'] 
+per_dic = {}
+for temp in [palma_temps, pure_temps]:
+    for i in [50,75,25]:
+        if temp == palma_temps:
+            ls = palma_ls
+        else:
+            ls = pure_ls
+        per_dic[ls[i]] = np.percentile(temp, i)
+## getting the percentile values: e.g. per_dic['palma_50']
+
+
+### this is coords for where want make lines -- put into dic format
+percent_coords = {}
+numbs =['50','75','25']
+dec = [0.5,0.75,0.25]
+names = ['palma','pure']
+coor_name_ls = []  ## list of all the dic key names (will be filled in loop)
+
+for var in names:
+    for i in range(len(numbs)):
+        nam1 = var + '_' + numbs[i] + '_line'
+        nam2 = var + '_' + numbs[i] + '_axis'
+        loc = var + '_' + numbs[i]
+        percent_coords[nam1] = (per_dic[loc], dec[i])
+        percent_coords[nam2] = (per_dic[loc],-0.05)
+        coor_name_ls.append(nam1)
+        coor_name_ls.append(nam2)
+
+"""
 half = (-5,0.5)
 sevenfive = (-5, 0.75)
 twofive = (-5, 0.25)
@@ -66,9 +97,31 @@ palma_25_line = (-24.61,0.25)
 palma_25_axis = (-24.61,-0.05)
 pure_25_line = (-29.35,0.25)
 pure_25_axis = (-29.35,-0.05)
+"""
 
+### v complicated loop for connecting all the coords together 
+## also plt onto graph
+# so need half --- 50_line , 50_line -- 50_axis
+
+percent_lines = {}
+y_axis_coors = [(-5,0.5),(-5, 0.75),(-5, 0.25)]
 coords = ax_main.transData
 
+for var in names:
+    if var == 'palma':
+        c = 'black'
+    else:
+        c = 'grey'
+    for i in range(len(numbs)):
+        line = var + '_' + numbs[i] + '_line'
+        axis = var + '_' + numbs[i] + '_axis'
+        y_ax = y_axis_coors[i]
+        line_1 = ConnectionPatch(xyA=y_ax, coordsA= coords ,xyB=line, linestyle = '--', color = c , alpha = 0.5)
+        line_2 = ConnectionPatch(xyA=line, coordsA= coords ,xyB=axis, linestyle = '--', color = c , alpha = 0.5)
+        ax_main.add_artist(line_1)
+        ax_main.add_artist(line_2)
+
+"""
 palma_50_horiz = ConnectionPatch(xyA=half, coordsA= coords ,xyB=palma_50_line, linestyle = '--', color = 'black', alpha = 0.5)
 palma_50_vert = ConnectionPatch(xyA=palma_50_line, coordsA= coords ,xyB=palma_50_axis, linestyle = '--', color = 'black', alpha = 0.5)
 palma_75_horiz = ConnectionPatch(xyA=sevenfive, coordsA= coords ,xyB=palma_75_line, linestyle = '--', color = 'black', alpha = 0.5)
@@ -95,7 +148,7 @@ pu_3 = ax_main.add_artist(pure_75_horiz)
 pu_4 = ax_main.add_artist(pure_75_vert)
 pu_5 = ax_main.add_artist(pure_25_horiz)
 pu_6 = ax_main.add_artist(pure_25_vert)
-
+"""
 
 ax_main.set_xlabel('Temperature ($^\circ$C)')
 ax_main.set_ylabel('Frozen fraction')
