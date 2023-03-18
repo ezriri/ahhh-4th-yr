@@ -48,7 +48,7 @@ for patch, color in zip(box['boxes'], ['grey','black']):
 
 #ax_main.set_xticks(ax_main.get_xticks())
 
-"""
+
 ### this is coords for where want make lines
 half = (-5,0.5)
 sevenfive = (-5, 0.75)
@@ -69,38 +69,38 @@ pure_25_axis = (-29.35,-0.05)
 
 coords = ax_main.transDat
 
-palma_50_horiz = ConnectionPatch(xyA=half, coordsA= ax.transData ,xyB=palma_50_line, linestyle = '--', color = 'black', alpha = 0.5)
-palma_50_vert = ConnectionPatch(xyA=palma_50_line, coordsA= ax.transData ,xyB=palma_50_axis, linestyle = '--', color = 'black', alpha = 0.5)
-palma_75_horiz = ConnectionPatch(xyA=sevenfive, coordsA= ax.transData ,xyB=palma_75_line, linestyle = '--', color = 'black', alpha = 0.5)
-palma_75_vert = ConnectionPatch(xyA=palma_75_line, coordsA= ax.transData ,xyB=palma_75_axis, linestyle = '--', color = 'black', alpha = 0.5)
-palma_25_horiz = ConnectionPatch(xyA=twofive, coordsA= ax.transData ,xyB=palma_25_line, linestyle = '--', color = 'black', alpha = 0.5)
-palma_25_vert = ConnectionPatch(xyA=palma_25_line, coordsA= ax.transData ,xyB=palma_25_axis, linestyle = '--', color = 'black', alpha = 0.5)
+palma_50_horiz = ConnectionPatch(xyA=half, coordsA= coords ,xyB=palma_50_line, linestyle = '--', color = 'black', alpha = 0.5)
+palma_50_vert = ConnectionPatch(xyA=palma_50_line, coordsA= coords ,xyB=palma_50_axis, linestyle = '--', color = 'black', alpha = 0.5)
+palma_75_horiz = ConnectionPatch(xyA=sevenfive, coordsA= coords ,xyB=palma_75_line, linestyle = '--', color = 'black', alpha = 0.5)
+palma_75_vert = ConnectionPatch(xyA=palma_75_line, coordsA= coords ,xyB=palma_75_axis, linestyle = '--', color = 'black', alpha = 0.5)
+palma_25_horiz = ConnectionPatch(xyA=twofive, coordsA= coords ,xyB=palma_25_line, linestyle = '--', color = 'black', alpha = 0.5)
+palma_25_vert = ConnectionPatch(xyA=palma_25_line, coordsA= coords ,xyB=palma_25_axis, linestyle = '--', color = 'black', alpha = 0.5)
 
-pure_50_horiz = ConnectionPatch(xyA=half, coordsA= ax.transData ,xyB=pure_50_line, linestyle = '--', color = 'grey', alpha = 0.5)
-pure_50_vert = ConnectionPatch(xyA=pure_50_line, coordsA= ax.transData ,xyB=pure_50_axis, linestyle = '--', color = 'grey', alpha = 0.5)
-pure_75_horiz = ConnectionPatch(xyA=sevenfive, coordsA= ax.transData ,xyB=pure_75_line, linestyle = '--', color = 'grey', alpha = 0.5)
-pure_75_vert = ConnectionPatch(xyA=pure_75_line, coordsA= ax.transData ,xyB=pure_75_axis, linestyle = '--', color = 'grey', alpha = 0.5)
-pure_25_horiz = ConnectionPatch(xyA=twofive, coordsA= ax.transData ,xyB=pure_25_line, linestyle = '--', color = 'grey', alpha = 0.5)
-pure_25_vert = ConnectionPatch(xyA=pure_25_line, coordsA= ax.transData ,xyB=pure_25_axis, linestyle = '--', color = 'grey', alpha = 0.5)
+pure_50_horiz = ConnectionPatch(xyA=half, coordsA= coords ,xyB=pure_50_line, linestyle = '--', color = 'grey', alpha = 0.5)
+pure_50_vert = ConnectionPatch(xyA=pure_50_line, coordsA= coords ,xyB=pure_50_axis, linestyle = '--', color = 'grey', alpha = 0.5)
+pure_75_horiz = ConnectionPatch(xyA=sevenfive, coordsA= coords ,xyB=pure_75_line, linestyle = '--', color = 'grey', alpha = 0.5)
+pure_75_vert = ConnectionPatch(xyA=pure_75_line, coordsA= coords ,xyB=pure_75_axis, linestyle = '--', color = 'grey', alpha = 0.5)
+pure_25_horiz = ConnectionPatch(xyA=twofive, coordsA= coords ,xyB=pure_25_line, linestyle = '--', color = 'grey', alpha = 0.5)
+pure_25_vert = ConnectionPatch(xyA=pure_25_line, coordsA= coords ,xyB=pure_25_axis, linestyle = '--', color = 'grey', alpha = 0.5)
 
-pal_1 = ax.add_artist(palma_50_horiz)
-pal_2 = ax.add_artist(palma_50_vert)
-pal_3 = ax.add_artist(palma_75_horiz)
-pal_4 = ax.add_artist(palma_75_vert)
-pal_5 = ax.add_artist(palma_25_horiz)
-pal_6 = ax.add_artist(palma_25_vert)
-pu_1 = ax.add_artist(pure_50_horiz)
-pu_2 = ax.add_artist(pure_50_vert)
-pu_3 = ax.add_artist(pure_75_horiz)
-pu_4 = ax.add_artist(pure_75_vert)
-pu_5 = ax.add_artist(pure_25_horiz)
-pu_6 = ax.add_artist(pure_25_vert)
-"""
+pal_1 = ax_main.add_artist(palma_50_horiz)
+pal_2 = ax_main.add_artist(palma_50_vert)
+pal_3 = ax_main.add_artist(palma_75_horiz)
+pal_4 = ax_main.add_artist(palma_75_vert)
+pal_5 = ax_main.add_artist(palma_25_horiz)
+pal_6 = ax_main.add_artist(palma_25_vert)
+pu_1 = ax_main.add_artist(pure_50_horiz)
+pu_2 = ax_main.add_artist(pure_50_vert)
+pu_3 = ax_main.add_artist(pure_75_horiz)
+pu_4 = ax_main.add_artist(pure_75_vert)
+pu_5 = ax_main.add_artist(pure_25_horiz)
+pu_6 = ax_main.add_artist(pure_25_vert)
+
 
 ax_main.set_xlabel('Temperature ($^\circ$C)')
 ax_main.set_ylabel('Frozen fraction')
 ax_main.legend()
-
+fig.tight_layout()
 
 plt.savefig('/home/ezri/lab_things/froze_fraction.png')
 
