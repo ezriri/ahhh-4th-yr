@@ -67,7 +67,7 @@ palma_25_axis = (-24.61,-0.05)
 pure_25_line = (-29.35,0.25)
 pure_25_axis = (-29.35,-0.05)
 
-coords = ax_main.transDat
+coords = ax_main.transData
 
 palma_50_horiz = ConnectionPatch(xyA=half, coordsA= coords ,xyB=palma_50_line, linestyle = '--', color = 'black', alpha = 0.5)
 palma_50_vert = ConnectionPatch(xyA=palma_50_line, coordsA= coords ,xyB=palma_50_axis, linestyle = '--', color = 'black', alpha = 0.5)
