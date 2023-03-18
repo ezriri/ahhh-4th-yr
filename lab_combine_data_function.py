@@ -88,8 +88,32 @@ extra_info.insert(3,'n_values',[len(palma_cleaned), len(pure_cleaned)])
 collated_data['palma_clean'] = pd.Series(palma_cleaned)
 collated_data['pure_clean'] = pd.Series(pure_cleaned)
 
-#collated_data.to_csv('/home/ezri/lab_things/processed/freeze_temps.csv', mode='w')
-extra_info.to_csv('/home/ezri/lab_things/processed/extra_info.csv', mode='w')
+# ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ # 
+#have added in this function, tackle freezing fraction too 
+
+def froze_frac(temp_list, n_values):
+    new_list = -np.sort(-temp_list)  ## so list is least --> most negative 
+    froz_number = []
+    min_t = np.min(temp_list)  ## coolest temp needed to freeze drops
+    for i in range(n_values):
+        #print((i+1)/n_values)
+        temp = new_list[i]
+        froz_number.append((temp/min_t)*((i+1)/n_values))  ## need the brackets around (i+1), doesnt work otherwise
+    return new_list, froz_number   ## temps in desending order, the frozen frac number
+
+
+x_palma , y_palma = froze_frac(collated_data['palma_clean'],len(palma_cleaned))
+x_pure , y_pure = froze_frac(collated_data['pure_clean'],len(pure_cleaned))
+
+#~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ # 
+
+collated_data['palma_re-ordered'] = pd.Series(x_palma)
+collated_data['pure_re-ordered'] = pd.Series(x_pure)
+collated_data['palma_froz_frac'] = pd.Series(y_palma)
+collated_data['pure_froz_frac'] = pd.Series(y_pure)
+
+collated_data.to_csv('/home/ezri/lab_things/processed/freeze_temps.csv', mode='w')
+#extra_info.to_csv('/home/ezri/lab_things/processed/extra_info.csv', mode='w')
 
 ## next step --> transform these numbers into inp conc for just pure + palma
 
