@@ -15,79 +15,54 @@ extra_info = pd.read_csv('/home/ezri/lab_things/processed/extra_info.csv')
 palma_n_values = extra_info['n_values'][0]
 pure_n_values = extra_info['n_values'][1]
 
-#palma_temps =pd.Series(main_data['palma_re-ordered'][:palma_n_values].sort_values(ascending=True)).array
-#palma_temps = pd.Series(main_data['palma_re-ordered'][:palma_n_values]).array
 palma_temps = main_data['palma_re-ordered'][:palma_n_values]
 pure_temps = main_data['pure_re-ordered'][:pure_n_values]
-
-#palma_froze = pd.Series(main_data['palma_froz_frac'][:palma_n_values]).array
-#palma_froze = pd.Series(main_data['palma_froz_frac'][:palma_n_values].sort_values(ascending=False)).array
 
 palma_froze = main_data['palma_froz_frac'][:palma_n_values]
 pure_froze = main_data['pure_froz_frac'][:pure_n_values]
 
-#print(palma_temps.ndim)
-#print(palma_froze.ndim)
+def calc_INP(froze_frac, n_value):
+    INP_conc = []
+    for i in range(len(froze_frac)):
+        f_ice = froze_frac[i]
+        # 2 equations, not sure which is correct ## may even be wrong 
+        
+        # account for total volume ??
+        #cumulative = (-np.log(1-f_ice))/(n_value * 0.001)
+        
+        # just 1 ul
+        cumulative = (-np.log(1-f_ice))/(0.001)
+        
+        ## alter this to calculate: INP / kg air 
+        #cumulative = cumulative/1.293E-6  ## as density of air ~ 1.293 kg/m3 
+        ## or INP / L of water 
+        #cumulative = cumulative / 1E-6
 
-#print(palma_temps)
-#print(palma_froze)
+        INP_conc.append(cumulative)
+    return INP_conc
 
 
-#x_palma = np.linspace(np.min(palma_temps), np.max(palma_temps), palma_n_values)
-#f_cubic = interp1d(palma_temps, palma_froze, kind='cubic')
+palma_INP = calc_INP(palma_froze, palma_n_values)
+pure_INP = calc_INP(pure_froze, pure_n_values)
 
 
-
-## make numbers bit nicer
-#palma_temps = np.around(palma_temps, 3)
-#palma_froze = np.around(palma_froze, 3)
-
-
-
-#print(palma_temps)
-
-#print(palma_temps.ndim)
-#print(np.any(palma_temps[1:] <= palma_temps[:-1]))
+## also want a palma that takes into account pure as background values
+# i.e. palma - pure INP conc = actual INP 
+## need to align temps / or would be fine just with same frozen frac
 
 plt.figure()
 plt.xlim(-5,-45)
-#plt.ylim(0,1)
+#plt.yscale('log')
 
-#print(type(palma_temps))
-#print(palma_temps)
-
-## want x = temp // y = frozen frac
-plt.plot(palma_temps, palma_froze,color = 'black', label = 'La Palma')
-plt.plot(pure_temps, pure_froze,color = 'grey', label = 'Pure')
-
-#
-
-
-#gfg = make_interp_spline(palma_temps, palma_froze, k=3)
-#y_palma = gfg(x_palma)
-  
-#plt.plot(x_palma, y_palma)
-#plt.plot(x_palma, f_cubic(x_palma))
-
-#plt.show()
-
+plt.plot(palma_temps, palma_INP,color = 'black', label = 'La Palma')
+plt.plot(pure_temps, pure_INP,color = 'grey', label = 'Pure')
 
 plt.xlabel('Temperature ($^\circ$C)')
-plt.ylabel('Frozen fraction')
-#plt.legend()
-
-
-"""
-plt.figure()
-sns.histplot(data=palma_temps, kde=True, color = 'black', alpha = 0.9, fill=False, bins =10, label = 'Palma')
-sns.histplot(data=pure_temps, kde=True, color = 'grey', alpha = 0.9, fill=False,bins=10, label = 'pure')
-
+plt.ylabel('Cumulative INP conc. (cm $^{-3}$)')
+#plt.ylabel('Cumulative INP conc. (kg $^{-1}$)')
+#plt.ylabel('Cumulative INP conc. (L $^{-1}$)')
 plt.legend()
-plt.xlabel('Temp (C)')
-plt.ylabel('Frequency')
-"""
 
 
-plt.savefig('/home/ezri/lab_things/froze_fraction.png')
-
+plt.savefig('/home/ezri/lab_things/INP_vs_temp.png')
 

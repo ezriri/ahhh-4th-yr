@@ -28,21 +28,42 @@ pure_froze = main_data['pure_froz_frac'][:pure_n_values]
 
 #plt.figure()
 #fig, ax = plt.subplots() sharex=True,
-fig, (ax_main, ax_hist) = plt.subplots(2, gridspec_kw={"height_ratios": (0.90, 0.1)})
+fig, (ax_main, ax_hist) = plt.subplots(2, gridspec_kw={"height_ratios": (0.90, 0.1)}, tight_layout = True)
+#fig.tight_layout()
+
 #plt.xlim(-5,-45)
 ax_main.set_xlim(-5,-45)
-ax_main.set_ylim(-0.05,1.05)
 ax_hist.set_xlim(-5,-45)
 #ax_main.set_xticks([-5, -10, -15, -20,-25,-30,-35,-40,-45])
 
-## want x = temp // y = frozen frac
-ax_main.plot(palma_temps, palma_froze,color = 'black', label = 'La Palma')
-ax_main.plot(pure_temps, pure_froze,color = 'grey', label = 'Pure')
+## want x = temp // y1 = frozen frac (// y2 = frequency)
+#ax_main.plot(palma_temps, palma_froze,color = 'black', label = 'La Palma (n = 561)')
+#ax_main.plot(pure_temps, pure_froze,color = 'grey', label = 'Pure (n = 536)')
+
+ax_main_new = ax_main.twinx().twiny()
+
+sns.histplot(data=palma_temps, ax=ax_main, color = 'black', alpha = 0.9, fill=False, bins =10, label = 'La Palma')
+sns.histplot(data=pure_temps, ax=ax_main, color = 'grey', alpha = 0.9, fill=False,bins=10, label = 'pure')
+
+ax_main_new.set_xlim(-45,-5)
+ax_main_new.set_ylim(-0.05,1.05)
+ax_main_new.xaxis.set_visible(False)
+sns.kdeplot(data=palma_temps, ax=ax_main_new, cumulative = True, color = 'black', alpha = 0.9, fill=False, label = 'La Palma')
+sns.kdeplot(data=pure_temps, ax=ax_main_new, cumulative = True, color = 'grey', alpha = 0.9, fill=False, label = 'pure')
+
+#ax_main.plot(palma_temps, np.around(palma_froze, 3),color = 'black', label = 'La Palma (n = 561)')
+#ax_main.plot(pure_temps, np.around(pure_froze, 3),color = 'grey', label = 'Pure (n = 536)')
+
+#ax_bis.plot(base_pal, np.cumsum(values_pal)/ np.cumsum(values_pal)[-1], color='black')
+
+
 
 ax_hist.axis('off')
 box = ax_hist.boxplot([pure_temps, palma_temps], vert=False, showfliers=False, notch=True, patch_artist=True)
 #ax_hist.boxplot(pure_temps, vert=False)
 
+
+## this is to add colour to plot
 for patch, color in zip(box['boxes'], ['grey','black']):
     patch.set_facecolor(color)
 
@@ -53,14 +74,25 @@ for patch, color in zip(box['boxes'], ['grey','black']):
 palma_ls = ['palma_50','palma_75','palma_25']
 pure_ls = ['pure_50','pure_75','pure_25'] 
 per_dic = {}
-for temp in [palma_temps, pure_temps]:
-    for i in [50,75,25]:
-        if temp == palma_temps:
-            ls = palma_ls
-        else:
-            ls = pure_ls
-        per_dic[ls[i]] = np.percentile(temp, i)
+temps = [palma_temps, pure_temps]
+
+
+numbs =['50','75','25']
+per_num = [50,25,75]
+for i in range(3):
+    pal = 'palma_'+numbs[i]
+    pur = 'pure_'+numbs[i]
+    per_dic[pal] = np.percentile(palma_temps, per_num[i])
+    per_dic[pur] = np.percentile(pure_temps, per_num[i])
+
 ## getting the percentile values: e.g. per_dic['palma_50']
+"""
+## this is just to print the percentiles to screen (loop through dic)
+for key in per_dic:
+    print(key)
+    print(per_dic[key])
+""" 
+
 
 
 ### this is coords for where want make lines -- put into dic format
@@ -80,80 +112,34 @@ for var in names:
         coor_name_ls.append(nam1)
         coor_name_ls.append(nam2)
 
-"""
-half = (-5,0.5)
-sevenfive = (-5, 0.75)
-twofive = (-5, 0.25)
-
-palma_50_line = (-26.51,0.5)
-palma_50_axis = (-26.51,-0.05)
-pure_50_line = (-31.96,0.5)
-pure_50_axis = (-31.96,-0.05)
-palma_75_line = (-28.22,0.75)
-palma_75_axis = (-28.22,-0.05)
-pure_75_line = (-34.84,0.75)
-pure_75_axis = (-34.84,-0.05)
-palma_25_line = (-24.61,0.25)
-palma_25_axis = (-24.61,-0.05)
-pure_25_line = (-29.35,0.25)
-pure_25_axis = (-29.35,-0.05)
-"""
-
 ### v complicated loop for connecting all the coords together 
 ## also plt onto graph
-# so need half --- 50_line , 50_line -- 50_axis
+# so need y_axis --- line ,line -- x_axis
 
 percent_lines = {}
 y_axis_coors = [(-5,0.5),(-5, 0.75),(-5, 0.25)]
 coords = ax_main.transData
 
+"""
 for var in names:
     if var == 'palma':
         c = 'black'
     else:
         c = 'grey'
     for i in range(len(numbs)):
-        line = var + '_' + numbs[i] + '_line'
-        axis = var + '_' + numbs[i] + '_axis'
+        line = percent_coords[var + '_' + numbs[i] + '_line']
+        axis = percent_coords[var + '_' + numbs[i] + '_axis']
         y_ax = y_axis_coors[i]
         line_1 = ConnectionPatch(xyA=y_ax, coordsA= coords ,xyB=line, linestyle = '--', color = c , alpha = 0.5)
         line_2 = ConnectionPatch(xyA=line, coordsA= coords ,xyB=axis, linestyle = '--', color = c , alpha = 0.5)
         ax_main.add_artist(line_1)
         ax_main.add_artist(line_2)
-
 """
-palma_50_horiz = ConnectionPatch(xyA=half, coordsA= coords ,xyB=palma_50_line, linestyle = '--', color = 'black', alpha = 0.5)
-palma_50_vert = ConnectionPatch(xyA=palma_50_line, coordsA= coords ,xyB=palma_50_axis, linestyle = '--', color = 'black', alpha = 0.5)
-palma_75_horiz = ConnectionPatch(xyA=sevenfive, coordsA= coords ,xyB=palma_75_line, linestyle = '--', color = 'black', alpha = 0.5)
-palma_75_vert = ConnectionPatch(xyA=palma_75_line, coordsA= coords ,xyB=palma_75_axis, linestyle = '--', color = 'black', alpha = 0.5)
-palma_25_horiz = ConnectionPatch(xyA=twofive, coordsA= coords ,xyB=palma_25_line, linestyle = '--', color = 'black', alpha = 0.5)
-palma_25_vert = ConnectionPatch(xyA=palma_25_line, coordsA= coords ,xyB=palma_25_axis, linestyle = '--', color = 'black', alpha = 0.5)
 
-pure_50_horiz = ConnectionPatch(xyA=half, coordsA= coords ,xyB=pure_50_line, linestyle = '--', color = 'grey', alpha = 0.5)
-pure_50_vert = ConnectionPatch(xyA=pure_50_line, coordsA= coords ,xyB=pure_50_axis, linestyle = '--', color = 'grey', alpha = 0.5)
-pure_75_horiz = ConnectionPatch(xyA=sevenfive, coordsA= coords ,xyB=pure_75_line, linestyle = '--', color = 'grey', alpha = 0.5)
-pure_75_vert = ConnectionPatch(xyA=pure_75_line, coordsA= coords ,xyB=pure_75_axis, linestyle = '--', color = 'grey', alpha = 0.5)
-pure_25_horiz = ConnectionPatch(xyA=twofive, coordsA= coords ,xyB=pure_25_line, linestyle = '--', color = 'grey', alpha = 0.5)
-pure_25_vert = ConnectionPatch(xyA=pure_25_line, coordsA= coords ,xyB=pure_25_axis, linestyle = '--', color = 'grey', alpha = 0.5)
-
-pal_1 = ax_main.add_artist(palma_50_horiz)
-pal_2 = ax_main.add_artist(palma_50_vert)
-pal_3 = ax_main.add_artist(palma_75_horiz)
-pal_4 = ax_main.add_artist(palma_75_vert)
-pal_5 = ax_main.add_artist(palma_25_horiz)
-pal_6 = ax_main.add_artist(palma_25_vert)
-pu_1 = ax_main.add_artist(pure_50_horiz)
-pu_2 = ax_main.add_artist(pure_50_vert)
-pu_3 = ax_main.add_artist(pure_75_horiz)
-pu_4 = ax_main.add_artist(pure_75_vert)
-pu_5 = ax_main.add_artist(pure_25_horiz)
-pu_6 = ax_main.add_artist(pure_25_vert)
-"""
 
 ax_main.set_xlabel('Temperature ($^\circ$C)')
 ax_main.set_ylabel('Frozen fraction')
 ax_main.legend()
-fig.tight_layout()
 
 plt.savefig('/home/ezri/lab_things/froze_fraction.png')
 
