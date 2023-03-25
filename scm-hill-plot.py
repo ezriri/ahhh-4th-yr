@@ -25,6 +25,9 @@ q=nc['q'][:,:,:]
 m1=np.max(q[0,:,14]/1.e6)
 #m1=np.max(q[0,:,14]/1.e7)
 
+precip = nc['precip'][:,:,0]
+precip = precip / 3600
+
 tau=6000.
 
 rt=tau
@@ -56,9 +59,11 @@ ax.set_xlabel('distance (km)')
 ax.set_ylabel('z (km)')
 
 data = plt.pcolormesh(time/60,z/1000.,q[:,:,14].T/1.e6,vmin=0.0, vmax= m1,cmap='Blues_r',shading='gouraud')
+#data = plt.pcolormesh(time/60,z/1000.,precip.T/1.e6,cmap='Purples',shading='gouraud')
 cbar = plt.colorbar(data)
 #cbar.set_clim((0,m1))
-cbar.set_label('number of cloud drops (cm$^{-3}$)')
+#cbar.set_label('number of cloud drops (cm$^{-3}$)')
+cbar.set_label('precip (mm)')
 ax.add_patch(pgon)
 
 nc.close()

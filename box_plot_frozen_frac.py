@@ -34,22 +34,26 @@ fig, (ax_main, ax_hist) = plt.subplots(2, gridspec_kw={"height_ratios": (0.90, 0
 #plt.xlim(-5,-45)
 ax_main.set_xlim(-5,-45)
 ax_hist.set_xlim(-5,-45)
+ax_main.set_ylim(-0.05,1.05)
 #ax_main.set_xticks([-5, -10, -15, -20,-25,-30,-35,-40,-45])
 
 ## want x = temp // y1 = frozen frac (// y2 = frequency)
 #ax_main.plot(palma_temps, palma_froze,color = 'black', label = 'La Palma (n = 561)')
 #ax_main.plot(pure_temps, pure_froze,color = 'grey', label = 'Pure (n = 536)')
 
-ax_main_new = ax_main.twinx().twiny()
+#ax_main_new = ax_main.twinx().twiny()
+ax_main_new = ax_main.twinx()
 
-sns.histplot(data=palma_temps, ax=ax_main, color = 'black', alpha = 0.9, fill=False, bins =10, label = 'La Palma')
-sns.histplot(data=pure_temps, ax=ax_main, color = 'grey', alpha = 0.9, fill=False,bins=10, label = 'pure')
+sns.histplot(data=palma_temps, ax=ax_main, color = 'white', alpha = 0.9, fill=False, bins =10, label = 'La Palma')
+sns.histplot(data=pure_temps, ax=ax_main, color = 'white', alpha = 0.9, fill=False,bins=10, label = 'pure')
 
-ax_main_new.set_xlim(-45,-5)
-ax_main_new.set_ylim(-0.05,1.05)
-ax_main_new.xaxis.set_visible(False)
-sns.kdeplot(data=palma_temps, ax=ax_main_new, cumulative = True, color = 'black', alpha = 0.9, fill=False, label = 'La Palma')
-sns.kdeplot(data=pure_temps, ax=ax_main_new, cumulative = True, color = 'grey', alpha = 0.9, fill=False, label = 'pure')
+#ax_main_new.set_xlim(-45,-5)
+ax_main_new.set_ylim(1.05,-0.05)
+#ax_main_new.xaxis.set_visible(False)
+ax_main_new.yaxis.set_visible(False)
+
+sns.kdeplot(data=palma_temps, ax=ax_main_new, cumulative = True, color = 'black', fill=False, label = 'La Palma')
+sns.kdeplot(data=pure_temps, ax=ax_main_new, cumulative = True, color = 'grey', fill=False, label = 'Pure')
 
 #ax_main.plot(palma_temps, np.around(palma_froze, 3),color = 'black', label = 'La Palma (n = 561)')
 #ax_main.plot(pure_temps, np.around(pure_froze, 3),color = 'grey', label = 'Pure (n = 536)')
@@ -58,8 +62,10 @@ sns.kdeplot(data=pure_temps, ax=ax_main_new, cumulative = True, color = 'grey', 
 
 
 
-ax_hist.axis('off')
-box = ax_hist.boxplot([pure_temps, palma_temps], vert=False, showfliers=False, notch=True, patch_artist=True)
+ax_hist.axis('off') # showfliers=False,
+
+outlier = dict(marker = 'x')
+box = ax_hist.boxplot([pure_temps, palma_temps], vert=False, flierprops= outlier,  widths = 0.6, notch=True, patch_artist=True)
 #ax_hist.boxplot(pure_temps, vert=False)
 
 
@@ -120,7 +126,7 @@ percent_lines = {}
 y_axis_coors = [(-5,0.5),(-5, 0.75),(-5, 0.25)]
 coords = ax_main.transData
 
-"""
+
 for var in names:
     if var == 'palma':
         c = 'black'
@@ -130,16 +136,16 @@ for var in names:
         line = percent_coords[var + '_' + numbs[i] + '_line']
         axis = percent_coords[var + '_' + numbs[i] + '_axis']
         y_ax = y_axis_coors[i]
-        line_1 = ConnectionPatch(xyA=y_ax, coordsA= coords ,xyB=line, linestyle = '--', color = c , alpha = 0.5)
-        line_2 = ConnectionPatch(xyA=line, coordsA= coords ,xyB=axis, linestyle = '--', color = c , alpha = 0.5)
+        line_1 = ConnectionPatch(xyA=y_ax, coordsA= coords ,xyB=line, linestyle = '--', color = c , alpha = 0.4)
+        line_2 = ConnectionPatch(xyA=line, coordsA= coords ,xyB=axis, linestyle = '--', color = c , alpha = 0.4)
         ax_main.add_artist(line_1)
         ax_main.add_artist(line_2)
-"""
+
 
 
 ax_main.set_xlabel('Temperature ($^\circ$C)')
 ax_main.set_ylabel('Frozen fraction')
-ax_main.legend()
+ax_main_new.legend(labels=['La Palma', 'Pure'], loc = 'upper left')
 
 plt.savefig('/home/ezri/lab_things/froze_fraction.png')
 
