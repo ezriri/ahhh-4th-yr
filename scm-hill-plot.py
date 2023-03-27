@@ -53,7 +53,7 @@ ax.pcolormesh(time/60,z/1000.,q[:,:,14].T/1.e6,vmin=0.0, vmax= m1,shading='goura
 
 #ax.set_ylim((0,8))
 #ax.set_xlim((0,100))
-ax.set_ylim((0,6))
+#ax.set_ylim((0,6))
 ax.set_xlim((0,40))
 ax.set_xlabel('distance (km)')
 ax.set_ylabel('z (km)')
@@ -62,8 +62,8 @@ data = plt.pcolormesh(time/60,z/1000.,q[:,:,14].T/1.e6,vmin=0.0, vmax= m1,cmap='
 #data = plt.pcolormesh(time/60,z/1000.,precip.T/1.e6,cmap='Purples',shading='gouraud')
 cbar = plt.colorbar(data)
 #cbar.set_clim((0,m1))
-#cbar.set_label('number of cloud drops (cm$^{-3}$)')
-cbar.set_label('precip (mm)')
+cbar.set_label('number of cloud drops (cm$^{-3}$)')
+#cbar.set_label('precip (mm)')
 ax.add_patch(pgon)
 
 nc.close()
