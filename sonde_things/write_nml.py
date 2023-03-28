@@ -8,7 +8,7 @@ def svp(t):
    svp_ice = 100.*6.1115*np.exp((23.036 - (t-ttr)/ 333.7)*(t-ttr)/(279.82 + (t-ttr)))
    return svp_ice
 
-f=open('mean_profile_2.txt','r')
+f=open('mean_profile_5.txt','r')
 
 str1=f.readlines() 
 imin=7

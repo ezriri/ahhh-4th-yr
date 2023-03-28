@@ -22,11 +22,14 @@ time=nc['time'][:]*u/1000.*60.
 z=nc['z'][:]
 q=nc['q'][:,:,:]
 
+var = nc['q'][:,:,31] ## ice 
+
 m1=np.max(q[0,:,14]/1.e6)
+#m1 = np.max(var/1.e6)
 #m1=np.max(q[0,:,14]/1.e7)
 
 precip = nc['precip'][:,:,0]
-precip = precip / 3600
+precip = precip / 3600 
 
 tau=6000.
 
@@ -49,7 +52,7 @@ pgon=plt.Polygon(pgon,color='g',alpha=1)
 fig, ax = plt.subplots(figsize=(12,6))
 #ax.set_facecolor('lightblue')
 
-ax.pcolormesh(time/60,z/1000.,q[:,:,14].T/1.e6,vmin=0.0, vmax= m1,shading='gouraud')
+#ax.pcolormesh(time/60,z/1000.,q[:,:,14].T/1.e6,vmin=0.0, vmax= m1,shading='gouraud')
 
 #ax.set_ylim((0,8))
 #ax.set_xlim((0,100))
@@ -59,10 +62,12 @@ ax.set_xlabel('distance (km)')
 ax.set_ylabel('z (km)')
 
 data = plt.pcolormesh(time/60,z/1000.,q[:,:,14].T/1.e6,vmin=0.0, vmax= m1,cmap='Blues_r',shading='gouraud')
+#data = plt.pcolormesh(time/60,z/1000.,var.T/1.e6,vmin=0.0, vmax= m1,cmap='Blues_r',shading='gouraud')
 #data = plt.pcolormesh(time/60,z/1000.,precip.T/1.e6,cmap='Purples',shading='gouraud')
 cbar = plt.colorbar(data)
 #cbar.set_clim((0,m1))
 cbar.set_label('number of cloud drops (cm$^{-3}$)')
+#cbar.set_label('ice')
 #cbar.set_label('precip (mm)')
 ax.add_patch(pgon)
 
