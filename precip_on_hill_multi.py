@@ -30,16 +30,14 @@ hill=np.append(hill,np.zeros((len(hill),1)))
 l1=len(t)
 # note the top of the hill is t[0:l1/2] and hill[0:l1/2]
 
-## we will just use the baseline for basic stuff
-time=nc_dic['baseline']['time'][:]*u/1000. # although called "time" this is actually distance in km
-dt = nc_dic['baseline']['time'][1]-nc_dic['baseline']['time'][0]
-z=nc_dic['baseline']['z'][:]/1000. # height in km 
-
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 ### function for giving rate + cumulative precip along the described hill
 ## e.g. specif_nc == nc_dic['baseline']
 def precip(specif_nc):
+    time=specif_nc['time'][:]*u/1000. # although called "time" this is actually distance in km
+    dt = specif_nc['time'][1]-specif_nc['time'][0]
+    z=specif_nc['z'][:]/1000. # height in km 
     q=specif_nc['precip'][:,:,0] # precipitation rate defined on time x height grid 
     f_interp_precip = []
     # create a 1-d interpolant for precipitation field for every time level
@@ -61,6 +59,10 @@ def precip(specif_nc):
         rain1[i]=f_interp_precip[i](hill1[i])
     
     rate = rain1
+    ## this bit is supposed to make all negative values = 0
+    rain1[rain1<0] = 0
+
+    ## pos want cumulative of only positive numbers
     cumulative = np.cumsum(rain1*dt/3600)
     return rate, cumulative
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#

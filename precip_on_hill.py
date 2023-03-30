@@ -62,6 +62,8 @@ axs[0].get_xaxis().set_visible(False)
 axs[0].set_ylabel('Precipitation rate (mm/hr)')
 
 
+rain1[rain1<0] = 0
+
 axs[1].plot(time,np.cumsum(rain1*dt/3600))
 axs[1].set_xlabel('distance (km)')
 axs[1].set_ylabel('Precipitation total (mm)')
