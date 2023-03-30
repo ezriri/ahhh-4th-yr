@@ -58,11 +58,10 @@ def precip(specif_nc):
     for i in range(len(time)):
         rain1[i]=f_interp_precip[i](hill1[i])
     
+    #rain1[rain1<0] = 0
     rate = rain1
     ## this bit is supposed to make all negative values = 0
     rain1[rain1<0] = 0
-
-    ## pos want cumulative of only positive numbers
     cumulative = np.cumsum(rain1*dt/3600)
     return rate, cumulative
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -79,9 +78,11 @@ for key in nc_dic:
 fig=plt.figure()
 plt.yscale('log')
 #plt.ylim(0,0.5)
+plt.xlim(0,35)
 
-
+# go through and plot all 
 for key in cumulative_d:
+    time = nc_dic[key]['time'][:]*u/1000.
     plt.plot(time, cumulative_d[key], label=key)
 
 plt.xlabel('distance (km)')
@@ -90,6 +91,7 @@ plt.ylabel('Precipitation total (mm)')
 """
 
 for key in rate_d:
+    time = nc_dic[key]['time'][:]*u/1000.
     plt.plot(time, rate_d[key], label=key)
 
 plt.xlabel('distance (km)')

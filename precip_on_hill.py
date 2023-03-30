@@ -7,7 +7,7 @@ import os
 import getpass
 import matplotlib.pyplot as plt
 
-nc_name = 'INP_2'
+nc_name = 'baseline'
 file_loc = '/home/ezri/scm_output/'
 #nc_files = ['baseline','no_SIP','no_wr','bam_m_2','INP_1','INP_2','warm_seed_2']
 
