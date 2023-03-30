@@ -8,18 +8,19 @@ import getpass
 
 import matplotlib.pyplot as plt
 
-username=getpass.getuser()
+nc = Dataset('/home/ezri/scm_output/output.nc')
 
 
 # assume 2.5 m/s e.g. 
-u=2.5 # m/s
+u=5 # m/s
 
 
 # the hill
 tau=6000.
 rt=tau
 t=np.linspace(0,rt,100)
-hill=tau*0.6/(2.*np.pi)*(1.-np.cos(2.*np.pi/tau*t))/1000.
+hill=tau*1.9452/(2.*np.pi)*(1.-np.cos(2.*np.pi/tau*t))/1000.
+#hill=tau*0.6/(2.*np.pi)*(1.-np.cos(2.*np.pi/tau*t))/1000.
 t=(t+10)*u/1000.
 t=np.append(t,t[::-1])
 hill=np.append(hill,np.zeros((len(hill),1)))
@@ -27,21 +28,12 @@ l1=len(t)
 
 # note the top of the hill is t[0:l1/2] and hill[0:l1/2]
 
-
-# read data needed
-outputDir='/tmp/' + username + '/'
-fileName=outputDir + 'output.nc'
-
-nc=Dataset(fileName)
-
 time=nc['time'][:]*u/1000. # although called "time" this is actually distance in km
 dt = nc['time'][1]-nc['time'][0]
 z=nc['z'][:]/1000. # height in km 
 q=nc['precip'][:,:,0] # precipitation rate defined on time x height grid 
 
 nc.close()
-
-
 
 
 # we need to know the height of the hill on the time grid
@@ -76,4 +68,7 @@ plt.xlabel('distance (km)')
 plt.ylabel('Precipitation total (mm)')
 
 plt.show()
+
+nc.close()
+plt.savefig('/home/ezri/scm_output/scm_precip.png', bbox_inches='tight')
 
