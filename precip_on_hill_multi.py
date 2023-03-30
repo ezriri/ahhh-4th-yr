@@ -69,30 +69,31 @@ def precip(specif_nc):
 rate_d = {}
 cumulative_d = {}
 
-#for i in range(len(nc_files)):
-#    rate, cumulative = precip(nc_dic[nc_files[i]])
-
 for key in nc_dic:
     rate, cumulative = precip(nc_dic[key])
     rate_d[key]= rate
     cumulative_d[key] = cumulative
 
 fig=plt.figure()
+plt.yscale('log')
+#plt.ylim(0,0.5)
+
 
 for key in cumulative_d:
-    plt.plot(time, cumulative_d[key])
+    plt.plot(time, cumulative_d[key], label=key)
+
+plt.xlabel('distance (km)')
+plt.ylabel('Precipitation total (mm)')
 
 """
-#plt.subplot(211)
-plt.plot(time,rain1)
+
+for key in rate_d:
+    plt.plot(time, rate_d[key], label=key)
+
 plt.xlabel('distance (km)')
 plt.ylabel('Precipitation rate (mm/hr)')
 """
-
-#plt.subplot(212)
-#plt.plot(time,)
-plt.xlabel('distance (km)')
-plt.ylabel('Precipitation total (mm)')
+plt.legend()
 
 plt.savefig('/home/ezri/scm_output/scm_cumul.png', bbox_inches='tight')
 

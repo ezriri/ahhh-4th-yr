@@ -7,14 +7,11 @@ import os
 import getpass
 import matplotlib.pyplot as plt
 
+nc_name = 'INP_2'
 file_loc = '/home/ezri/scm_output/'
-nc_files = ['baseline','no_SIP','no_wr','bam_m_2','INP_1','INP_2','warm_seed_2']
+#nc_files = ['baseline','no_SIP','no_wr','bam_m_2','INP_1','INP_2','warm_seed_2']
 
-## this opens up all the netcdf files interested in --> one dic
-nc_dic = {}
-for file in nc_files:
-    data = file_loc + file + '.nc'
-    nc_dic[file]= Dataset(data)
+nc = Dataset(file_loc+nc_name+'.nc')
 
 # assume 2.5 m/s e.g. 
 u=5 # m/s
@@ -31,15 +28,10 @@ l1=len(t)
 # note the top of the hill is t[0:l1/2] and hill[0:l1/2]
 
 ## we will just use the baseline for basic stuff
-time=nc_dic['baseline']['time'][:]*u/1000. # although called "time" this is actually distance in km
-dt = nc_dic['baseline']['time'][1]-nc_dic['baseline']['time'][0]
-z=nc_dic['baseline']['z'][:]/1000. # height in km 
-
-## !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-q=nc_dic['baseline']['precip'][:,:,0] # precipitation rate defined on time x height grid 
-
-#def precip():
-    
+time=nc['time'][:]*u/1000. # although called "time" this is actually distance in km
+dt = nc['time'][1]-nc['time'][0]
+z=nc['z'][:]/1000. # height in km 
+q=nc['precip'][:,:,0] # precipitation rate defined on time x height grid 
 
 
 # we need to know the height of the hill on the time grid
@@ -61,23 +53,21 @@ for i in range(len(time)):
 rain1=np.zeros(len(time))
 for i in range(len(time)):
     rain1[i]=f_interp_precip[i](hill1[i])
-    
-plt.ion()
-plt.subplot(211)
-plt.plot(time,rain1)
-plt.xlabel('distance (km)')
-plt.ylabel('Precipitation rate (mm/hr)')
 
-plt.subplot(212)
-plt.plot(time,np.cumsum(rain1*dt/3600))
-plt.xlabel('distance (km)')
-plt.ylabel('Precipitation total (mm)')
 
-plt.show()
+fig, axs = plt.subplots(2,1)
+fig.suptitle(nc_name)
+axs[0].plot(time,rain1)
+axs[0].get_xaxis().set_visible(False)
+axs[0].set_ylabel('Precipitation rate (mm/hr)')
 
-plt.savefig('/home/ezri/scm_output/scm_precip.png', bbox_inches='tight')
 
-## close netcdf files 
-for key in nc_dic:
-    nc_dic[key].close()
+axs[1].plot(time,np.cumsum(rain1*dt/3600))
+axs[1].set_xlabel('distance (km)')
+axs[1].set_ylabel('Precipitation total (mm)')
+
+
+plt.savefig('/home/ezri/scm_output/scm_hill_pre.png', bbox_inches='tight')
+
+nc.close()
 ##

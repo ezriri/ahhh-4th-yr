@@ -14,7 +14,8 @@ import getpass
 import matplotlib.pyplot as plt
 #import pylab as plt    
    
-nc = Dataset('/home/ezri/scm_output/output.nc')
+#nc = Dataset('/home/ezri/scm_output/output.nc')
+nc = Dataset('/home/ezri/scm_output/output_baseline.nc')
 
 u=5  # m/s
  
@@ -23,9 +24,10 @@ z=nc['z'][:]
 q=nc['q'][:,:,:]
 
 var = nc['q'][:,:,31] ## ice 
+var = var*1000
 
-m1=np.max(q[0,:,14]/1.e6)
-#m1 = np.max(var/1.e6)
+#m1=np.max(q[0,:,14]/1.e6)
+m1 = np.max(var/1.e6)
 #m1=np.max(q[0,:,14]/1.e7)
 
 precip = nc['precip'][:,:,0]
@@ -56,18 +58,18 @@ fig, ax = plt.subplots(figsize=(12,6))
 
 #ax.set_ylim((0,8))
 #ax.set_xlim((0,100))
-#ax.set_ylim((0,6))
-ax.set_xlim((0,40))
+ax.set_ylim((0,6))
+ax.set_xlim((0,15))
 ax.set_xlabel('distance (km)')
 ax.set_ylabel('z (km)')
 
-data = plt.pcolormesh(time/60,z/1000.,q[:,:,14].T/1.e6,vmin=0.0, vmax= m1,cmap='Blues_r',shading='gouraud')
-#data = plt.pcolormesh(time/60,z/1000.,var.T/1.e6,vmin=0.0, vmax= m1,cmap='Blues_r',shading='gouraud')
+#data = plt.pcolormesh(time/60,z/1000.,q[:,:,14].T/1.e6,vmin=0.0, vmax= m1,cmap='Blues_r',shading='gouraud')
+data = plt.pcolormesh(time/60,z/1000.,var.T/1.e6,vmin=0.0, vmax= 10,cmap='Blues_r',shading='gouraud')
 #data = plt.pcolormesh(time/60,z/1000.,precip.T/1.e6,cmap='Purples',shading='gouraud')
 cbar = plt.colorbar(data)
 #cbar.set_clim((0,m1))
-cbar.set_label('number of cloud drops (cm$^{-3}$)')
-#cbar.set_label('ice')
+#cbar.set_label('number of cloud drops (cm$^{-3}$)')
+cbar.set_label('ice (g/kg)')
 #cbar.set_label('precip (mm)')
 ax.add_patch(pgon)
 
