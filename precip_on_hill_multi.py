@@ -8,7 +8,7 @@ import getpass
 import matplotlib.pyplot as plt
 
 file_loc = '/home/ezri/scm_output/'
-nc_files = ['baseline','no_SIP','no_wr','bam_m_2','INP_1','INP_2','warm_seed_2']
+nc_files = ['baseline','no_SIP','no_wr','no_theta','bam_m_2','INP_1','INP_2','warm_seed_2']
 
 ## this opens up all the netcdf files interested in --> one dic
 nc_dic = {}
@@ -55,8 +55,14 @@ def precip(specif_nc):
     # now we have the interpolant, use it to get the precipitation on every time level on 
     # the contour of the hill
     rain1=np.zeros(len(time))
-    for i in range(len(time)):
-        rain1[i]=f_interp_precip[i](hill1[i])
+    print(f_hill_interp.ndim)
+    #sd = 
+    #for i in range(len(time)):
+	## adding in cleaning bit
+	#precip = f_interp_precip[i](hill1[i])
+	#if precip < 
+        #rain1[i]=f_interp_precip[i](hill1[i])
+	
     
     #rain1[rain1<0] = 0
     rate = rain1
@@ -65,7 +71,13 @@ def precip(specif_nc):
     cumulative = np.cumsum(rain1*dt/3600)
     return rate, cumulative
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-  
+
+
+
+## cleaning function --> get rid of absolutely mad numbers (everything within 3 SD)
+
+
+
 ## loop through all nc files to get rate + cumulative --> seperate dics
 rate_d = {}
 cumulative_d = {}
@@ -80,6 +92,7 @@ plt.yscale('log')
 #plt.ylim(0,0.5)
 plt.xlim(0,35)
 
+"""
 # go through and plot all 
 for key in cumulative_d:
     time = nc_dic[key]['time'][:]*u/1000.
@@ -89,18 +102,18 @@ plt.xlabel('distance (km)')
 plt.ylabel('Precipitation total (mm)')
 
 """
-
+"""
 for key in rate_d:
     time = nc_dic[key]['time'][:]*u/1000.
     plt.plot(time, rate_d[key], label=key)
 
 plt.xlabel('distance (km)')
 plt.ylabel('Precipitation rate (mm/hr)')
-"""
+
 plt.legend()
 
 plt.savefig('/home/ezri/scm_output/scm_cumul.png', bbox_inches='tight')
-
+"""
 ## close netcdf files 
 for key in nc_dic:
     nc_dic[key].close()
