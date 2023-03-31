@@ -61,10 +61,10 @@ def precip(specif_nc):
     upper = mean + sd*3
     lower = mean - sd*3
     for i in range(len(time)):
-	## adding in cleaning bit
-	precip = f_interp_precip[i](hill1[i])
-	if precip < upper and precip > lower
-        rain1[i]= precip
+        ## adding in cleaning bit
+        precip = f_interp_precip[i](hill1[i])
+        if precip < upper and precip > lower:
+            rain1[i]= precip
 	
     
     #rain1[rain1<0] = 0
