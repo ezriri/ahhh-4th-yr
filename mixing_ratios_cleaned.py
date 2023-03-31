@@ -52,12 +52,12 @@ plt.yscale('log')
 plt.xlim(0,35)
 
 # go through and plot all 
-for key in cloud:
+for key in ice:
     time = nc_dic[key]['time'][:]*u/1000.
-    plt.plot(time, cloud[key], label=key)
+    plt.plot(time, ice[key], label=key)
 
 plt.xlabel('distance (km)')
-plt.ylabel('cloud mixing ratio (g/kg)')
+plt.ylabel('ice mixing ratio (g/kg)')
 
 plt.legend()
 

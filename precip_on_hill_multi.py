@@ -8,7 +8,7 @@ import getpass
 import matplotlib.pyplot as plt
 
 file_loc = '/home/ezri/scm_output/'
-nc_files = ['baseline','no_SIP','no_wr','no_theta','bam_m_2','INP_1','INP_2','warm_seed_2']
+nc_files = ['baseline','no_SIP','no_wr','no_theta','bam_m_2','INP_1','INP_2','warm_seed_2','warm_seed_3']
 
 ## this opens up all the netcdf files interested in --> one dic
 nc_dic = {}
@@ -55,22 +55,23 @@ def precip(specif_nc):
     # now we have the interpolant, use it to get the precipitation on every time level on 
     # the contour of the hill
     rain1=np.zeros(len(time))
-    print(f_hill_interp.ndim)
+    #print(f_hill_interp.ndim)
     sd = np.std(q[:])
     mean = np.mean(q[:])
     upper = mean + sd*3
     lower = mean - sd*3
     for i in range(len(time)):
-        ## adding in cleaning bit
-        precip = f_interp_precip[i](hill1[i])
-        if precip < upper and precip > lower:
-            rain1[i]= precip
+        rain1[i]=f_interp_precip[i](hill1[i])
+	## adding in cleaning bit
+        #precip = f_interp_precip[i](hill1[i])
+        #if precip < upper and precip > lower:
+        #    rain1[i]= precip
 	
     
     #rain1[rain1<0] = 0
     rate = rain1
     ## this bit is supposed to make all negative values = 0
-    #rain1[rain1<0] = 0
+    rain1[rain1<0] = 0
     cumulative = np.cumsum(rain1*dt/3600)
     return rate, cumulative
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -110,11 +111,11 @@ for key in rate_d:
 
 plt.xlabel('distance (km)')
 plt.ylabel('Precipitation rate (mm/hr)')
-
+"""
 plt.legend()
 
 plt.savefig('/home/ezri/scm_output/scm_cumul.png', bbox_inches='tight')
-"""
+
 ## close netcdf files 
 for key in nc_dic:
     nc_dic[key].close()
