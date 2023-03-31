@@ -56,18 +56,21 @@ def precip(specif_nc):
     # the contour of the hill
     rain1=np.zeros(len(time))
     print(f_hill_interp.ndim)
-    #sd = 
-    #for i in range(len(time)):
+    sd = np.std(q[:])
+    mean = np.mean(q[:])
+    upper = mean + sd*3
+    lower = mean - sd*3
+    for i in range(len(time)):
 	## adding in cleaning bit
-	#precip = f_interp_precip[i](hill1[i])
-	#if precip < 
-        #rain1[i]=f_interp_precip[i](hill1[i])
+	precip = f_interp_precip[i](hill1[i])
+	if precip < upper and precip > lower
+        rain1[i]= precip
 	
     
     #rain1[rain1<0] = 0
     rate = rain1
     ## this bit is supposed to make all negative values = 0
-    rain1[rain1<0] = 0
+    #rain1[rain1<0] = 0
     cumulative = np.cumsum(rain1*dt/3600)
     return rate, cumulative
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -75,7 +78,6 @@ def precip(specif_nc):
 
 
 ## cleaning function --> get rid of absolutely mad numbers (everything within 3 SD)
-
 
 
 ## loop through all nc files to get rate + cumulative --> seperate dics
@@ -92,7 +94,6 @@ plt.yscale('log')
 #plt.ylim(0,0.5)
 plt.xlim(0,35)
 
-"""
 # go through and plot all 
 for key in cumulative_d:
     time = nc_dic[key]['time'][:]*u/1000.
@@ -101,7 +102,7 @@ for key in cumulative_d:
 plt.xlabel('distance (km)')
 plt.ylabel('Precipitation total (mm)')
 
-"""
+
 """
 for key in rate_d:
     time = nc_dic[key]['time'][:]*u/1000.
