@@ -24,20 +24,20 @@ for file in nc_files:
 def extract_v(dic,n):
     var = {}
     for key in dic:
-	b = dic[key]['q'][:,:,n]
+        b = dic[key]['q'][:,:,n]
         new_unit = b/1000 # in g/kg
         mean_axis = np.mean(new_unit,axis=1)
-	sd = np.std(mean_axis[:,0])
-	mean = np.mean(mean_axis[:,0])
-	upper = mean + sd*3
-	lower = mean - sd*3
-	clean_list = []
-	for i in range(len(mean_axis)):
-	    num = mean_axis[i]
-	    if num < upper and num > lower:
-	        clean_list.append(num)
-	    else:
-		clean_list.append(0)
+        sd = np.std(mean_axis[:,0])
+        mean = np.mean(mean_axis[:,0])
+        upper = mean + sd*3
+        lower = mean - sd*3
+        clean_list = []
+        for i in range(len(mean_axis)):
+                num = mean_axis[i]
+                if num < upper and num > lower:
+                        clean_list.append(num)
+                else:
+                        clean_list.append(0)
         var[key] = clean_list
     return var
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
