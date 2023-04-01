@@ -76,11 +76,6 @@ def precip(specif_nc):
     return rate, cumulative
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-
-
-## cleaning function --> get rid of absolutely mad numbers (everything within 3 SD)
-
-
 ## loop through all nc files to get rate + cumulative --> seperate dics
 rate_d = {}
 cumulative_d = {}
@@ -114,7 +109,7 @@ plt.ylabel('Precipitation rate (mm/hr)')
 """
 plt.legend()
 
-plt.savefig('/home/ezri/scm_output/scm_cumul.png', bbox_inches='tight')
+#plt.savefig('/home/ezri/scm_output/scm_cumul.png', bbox_inches='tight')
 
 ## close netcdf files 
 for key in nc_dic:

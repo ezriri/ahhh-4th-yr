@@ -24,7 +24,7 @@ def extract_v(dic,n):
     var = {}
     for key in dic:
         b = dic[key]['q'][:,:,n]
-        new_unit = b/1000 # in g/kg
+        new_unit = b*1000 # in g/kg
         mean = np.mean(new_unit,axis=1)
         var[key] = mean
     return var
