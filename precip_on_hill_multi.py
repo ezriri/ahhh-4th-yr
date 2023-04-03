@@ -7,8 +7,12 @@ import os
 import getpass
 import matplotlib.pyplot as plt
 
-file_loc = '/home/ezri/scm_output/'
-nc_files = ['baseline','no_SIP','no_wr','no_theta','bam_m_2','INP_1','INP_2','warm_seed_2','warm_seed_3']
+#### rate or cumulative? ## ########
+plot = 'cumulative' #cumulative / rate   #
+####################################
+
+file_loc = '/home/ezri/scm_output/no_theta/'
+nc_files = ['baseline','no_SIP','no_wr','bam_m_2','INP_1','INP_2','warm_seed_2','warm_seed_3']
 
 ## this opens up all the netcdf files interested in --> one dic
 nc_dic = {}
@@ -90,26 +94,26 @@ plt.yscale('log')
 #plt.ylim(0,0.5)
 plt.xlim(0,35)
 
-# go through and plot all 
-for key in cumulative_d:
-    time = nc_dic[key]['time'][:]*u/1000.
-    plt.plot(time, cumulative_d[key], label=key)
+if plot == 'cumulative':
+    for key in cumulative_d:
+        time = nc_dic[key]['time'][:]*u/1000.
+        plt.plot(time, cumulative_d[key], label=key)
 
-plt.xlabel('distance (km)')
-plt.ylabel('Precipitation total (mm)')
+    plt.xlabel('distance (km)')
+    plt.ylabel('Precipitation total (mm)')
 
 
-"""
-for key in rate_d:
-    time = nc_dic[key]['time'][:]*u/1000.
-    plt.plot(time, rate_d[key], label=key)
+else:
+    for key in rate_d:
+        time = nc_dic[key]['time'][:]*u/1000.
+        plt.plot(time, rate_d[key], label=key)
 
-plt.xlabel('distance (km)')
-plt.ylabel('Precipitation rate (mm/hr)')
-"""
+    plt.xlabel('distance (km)')
+    plt.ylabel('Precipitation rate (mm/hr)')
+
 plt.legend()
 
-#plt.savefig('/home/ezri/scm_output/scm_cumul.png', bbox_inches='tight')
+plt.savefig('/home/ezri/scm_output/scm_precip.png', bbox_inches='tight')
 
 ## close netcdf files 
 for key in nc_dic:

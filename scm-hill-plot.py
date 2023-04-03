@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 #import pylab as plt    
    
 #nc = Dataset('/home/ezri/scm_output/output.nc')
-nc = Dataset('/home/ezri/scm_output/output_baseline.nc')
+nc = Dataset('/home/ezri/scm_output/no_theta/output_baseline.nc')
 
 u=5  # m/s
  

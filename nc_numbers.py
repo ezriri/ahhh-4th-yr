@@ -18,8 +18,8 @@ q_mix_rat = [15,23,31] ## currently kg/kg
 q_num_conc = [14,22,30] ## currently n/kg
 prec = ['p_r','p_c']
 ########
-file_loc = '/home/ezri/scm_output/'
-nc_files = ['baseline','no_SIP','no_wr','no_theta','bam_m_2','INP_1','INP_2','warm_seed_2','warm_seed_3'] ## these will each be their own columns
+file_loc = '/home/ezri/scm_output/no_theta/'
+nc_files = ['baseline','no_SIP','no_wr','bam_m_2','INP_1','INP_2','warm_seed_2','warm_seed_3'] ## these will each be their own columns
 
 nc_dic = {}
 for file in nc_files: ## this opens up all the netcdf files interested in --> one dic
@@ -55,10 +55,6 @@ for key in nc_dic:
         q = (nc['q'][:,:,i])*1000 # g/kg
         q[q == 0] = np.nan ## we want to get mean mixing ratio of just cloud, not empty space
         key_list = calc(q,key_list)
-        #key_list.append(np.nanmean(q))
-        #key_list.append(np.nanmax(q))
-        #key_list.append(np.nanmin(q))
-        #key_list.append(np.nanstd(q))
 
     for j in q_num_conc:
         q = nc['q'][:,:,j]

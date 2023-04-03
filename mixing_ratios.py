@@ -5,11 +5,11 @@ import os
 import getpass
 import matplotlib.pyplot as plt
 
-## number of specif q variable of interest
-n = 23
+## mixing ratio of interest
+mr = 'ice' # cloud / ice / rain
 
-file_loc = '/home/ezri/scm_output/'
-nc_files = ['baseline','no_SIP','no_wr','no_theta','bam_m_2','INP_1','INP_2','warm_seed_2']
+file_loc = '/home/ezri/scm_output/no_theta/'
+nc_files = ['baseline','no_SIP','no_wr','bam_m_2','INP_1','INP_2','warm_seed_2','warm_seed_3']
 u=5 ## wind speed -m/s
 ## this opens up all the netcdf files interested in --> one dic
 nc_dic = {}
@@ -30,9 +30,12 @@ def extract_v(dic,n):
     return var
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-cloud = extract_v(nc_dic,15)
-rain = extract_v(nc_dic,23)
-ice = extract_v(nc_dic,31)
+if mr == 'cloud':
+    var = extract_v(nc_dic,15)
+elif mr == 'rain':
+    var = extract_v(nc_dic,23)
+else:
+    var = extract_v(nc_dic,31)
 
 fig=plt.figure()
 plt.yscale('log')
@@ -40,12 +43,12 @@ plt.yscale('log')
 plt.xlim(0,35)
 
 # go through and plot all 
-for key in ice:
+for key in var:
     time = nc_dic[key]['time'][:]*u/1000.
-    plt.plot(time, ice[key], label=key)
+    plt.plot(time, var[key], label=key)
 
 plt.xlabel('distance (km)')
-plt.ylabel('ice mixing ratio (g/kg)')
+plt.ylabel(mr + ' mixing ratio (g/kg)')
 
 plt.legend()
 
