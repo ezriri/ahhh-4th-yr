@@ -92,12 +92,13 @@ for i in range(3):
     per_dic[pur] = np.percentile(pure_temps, per_num[i])
 
 ## getting the percentile values: e.g. per_dic['palma_50']
+
 """
 ## this is just to print the percentiles to screen (loop through dic)
 for key in per_dic:
     print(key)
     print(per_dic[key])
-""" 
+"""
 
 
 
@@ -126,7 +127,7 @@ percent_lines = {}
 y_axis_coors = [(-5,0.5),(-5, 0.75),(-5, 0.25)]
 coords = ax_main.transData
 
-
+"""
 for var in names:
     if var == 'palma':
         c = 'black'
@@ -141,11 +142,14 @@ for var in names:
         ax_main.add_artist(line_1)
         ax_main.add_artist(line_2)
 
-
+"""
 
 ax_main.set_xlabel('Temperature ($^\circ$C)')
 ax_main.set_ylabel('Frozen fraction')
-ax_main_new.legend(labels=['La Palma', 'Pure'], loc = 'upper left')
+palma_patch = patches.Patch(color='black', label='La Palma (n = 561)')
+pure_patch = patches.Patch(color='grey', label='Ultrapure (n = 536)')
+#ax_main_new.legend(labels=['La Palma', 'Pure'], loc = 'upper left')
+ax_main_new.legend(handles=[palma_patch,pure_patch], loc = 'upper left')
 
 plt.savefig('/home/ezri/lab_things/froze_fraction.png')
 

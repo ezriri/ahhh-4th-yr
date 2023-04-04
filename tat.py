@@ -3,9 +3,12 @@ import scipy.interpolate as sci
 from netCDF4 import Dataset
 import pandas as pd
 
-nc = Dataset('/home/ezri/scm_output/baseline.nc')
+
+nc = Dataset('/home/ezri/scm_output/no_theta/baseline.nc')
 
 rain = (nc['q'][:,:,15])*1000
+
+q = nc['t'][:,:]
 
 mean = np.max(rain)
 mean_0 = np.amax(rain,axis=0)
@@ -20,4 +23,12 @@ mean_1 = np.amax(rain,axis=1)
 
 nc_numbers = pd.read_csv('/home/ezri/scm_output/nc_numbers.csv')
 
-print(nc_numbers['INP_2'][6])
+#print(nc_numbers['INP_2'][0])
+
+
+print(np.nanmean(q))
+print(np.nanmax(q))
+print(np.nanmin(q))
+print(np.nanstd(q))
+
+nc.close()

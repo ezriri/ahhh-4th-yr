@@ -12,7 +12,9 @@ plot = 'cumulative' #cumulative / rate   #
 ####################################
 
 file_loc = '/home/ezri/scm_output/no_theta/'
-nc_files = ['baseline','no_SIP','no_wr','bam_m_2','INP_1','INP_2','warm_seed_2','warm_seed_3']
+#nc_files = ['baseline','no_SIP','no_wr','bam_m_2']
+nc_files = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
+#nc_files = ['baseline','no_SIP','no_wr','bam_m_2','INP_1','INP_2','warm_seed_2','warm_seed_3']
 
 ## this opens up all the netcdf files interested in --> one dic
 nc_dic = {}
