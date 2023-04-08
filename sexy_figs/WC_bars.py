@@ -19,9 +19,9 @@ nc_dic = {}
 b = nc_num['baseline']
 ctrl_t = (b[0] + b[4] + b[8]) ## this is sum of baseline mix rat (to find %)
 
+x = 0 
 for j in range(0,9,4):
     list = []
-    x = 0 
     for file in nc_names:
         num = nc_num[file][j]
         list.append((num/ctrl_t)*100) # % value of total mix ratio it takes up
@@ -34,7 +34,7 @@ for j in range(0,9,4):
 fig, ax = plt.subplots()
 bottom = np.zeros(5)
 
-for bar_lab, values in nc_dic:
+for bar_lab, values in nc_dic.items():
      ax.bar(names, values, label=bar_lab, bottom=bottom)
      bottom += values
 
