@@ -19,7 +19,7 @@ nc_names = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
 #files =  ['ctrl','INP_1','INP_2','hygro_1','hygro_2']
 var = ('cloud','rain','ice')
 names = ('Control', 'INP 1', 'INP 2', 'Hygro 1','Hygro 2')
-stack_colours = ['paleturquoise', 'royalblue', 'sliver'] ## correlate with different variables
+stack_colours = ['skyblue', 'royalblue', 'silver'] ## correlate with different variables
 
 # make dic of values - % water distribution, in relation to ctrl
 nc_dic = {}
@@ -40,13 +40,7 @@ for j in range(0,9,4):
 
 fig, ax = plt.subplots()
 bottom = np.zeros(5)
-ax_wc_lab = ax.twiny()
-
-i = 0
-for bar_lab, values in nc_dic.items():
-     ax.bar(names, values, label=bar_lab, bottom=bottom, colour = stack_colours[i]) ## this is plottling the stacked bars interested in
-     bottom += values
-     i += 1
+ax_wc_lab = ax.twinx()
 
 other_bars = []
 for file in nc_names:
@@ -56,19 +50,24 @@ for file in nc_names:
         list.append(num)
     other_bars.append(sum(list))
 
-ax_wc_lab.bar(other_bars, color = 'w')
+ax_wc_lab.bar(names,other_bars, alpha = 0)
 
+
+i = 0
+for bar_lab, values in nc_dic.items():
+     ax.bar(names, values, label=bar_lab, bottom=bottom, color = stack_colours[i]) ## this is plottling the stacked bars interested in
+     bottom += values
+     i += 1
 
 ax.set_ylabel('Water content distribution (%)')
-ax_wc_lab.set_ylabel('Water content (gm$^{-3}$)')
+ax_wc_lab.set_ylabel('Average water content (gm$^{-3}$)')
 
-#plt.legend()
-
-cloud_patch = patches.Patch(color='paleturquoise', label='Cloud')
+cloud_patch = patches.Patch(color='skyblue', label='Cloud')
 rain_patch = patches.Patch(color='royalblue', label='Rain')
-ice_patch = patches.Patch(color='sliver', label='Ice')
+ice_patch = patches.Patch(color='silver', label='Ice')
 
-ax.legend(handles=[cloud_patch,rain_patch,ice_patch], loc = 'upper left')
+# fancybox=True, shadow=True 
+ax.legend(handles=[cloud_patch,rain_patch,ice_patch], bbox_to_anchor=(0.5, 1.1), ncol =3,  loc = 'upper right',fancybox=True, shadow=True)
 plt.tight_layout()
 plt.savefig('/home/ezri/scm_output/figs/stacked_bars.png')
 
