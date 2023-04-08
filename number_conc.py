@@ -6,12 +6,17 @@ import getpass
 import matplotlib.pyplot as plt
 
 ## mixing ratio of interest
-mr = 'cloud' # cloud / ice / rain
+mr = 'ice' # cloud / ice / rain
 
 file_loc = '/home/ezri/scm_output/no_theta/'
 #nc_files = ['baseline','no_SIP','no_wr','bam_m_2','INP_1','INP_2','warm_seed_2','warm_seed_3']
-#nc_files = ['baseline','no_SIP','no_wr','bam_m_2']
-nc_files = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
+#nc_files = ['baseline','no_SIP','no_wr']
+#nc_files = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
+
+nc_files =  ['baseline','INP_1','INP_2','hygro_1','hygro_2']
+names = ['Control', 'INP 1', 'INP 2', 'Hygro 1','Hygro 2']
+#names = ['Control', 'No SIP', 'No WR']
+
 u=5 ## wind speed -m/s
 ## this opens up all the netcdf files interested in --> one dic
 nc_dic = {}
@@ -25,7 +30,7 @@ for file in nc_files:
 def extract_v(dic,n):
     var = {}
     for key in dic:
-        b = dic[key]['q'][:,:,n]
+        b = (dic[key]['q'][:,:,n])/1.e6
         
         mean = np.mean(b,axis=1)
         var[key] = mean
@@ -45,12 +50,14 @@ plt.yscale('log')
 plt.xlim(0,35)
 
 # go through and plot all 
+i = 0
 for key in var:
     time = nc_dic[key]['time'][:]*u/1000.
-    plt.plot(time, var[key], label=key)
+    plt.plot(time, var[key], label=names[i])
+    i = i + 1
 
 plt.xlabel('distance (km)')
-plt.ylabel(mr + ' number concentration (kg$^{-1}$)')
+plt.ylabel(mr + ' number concentration (cm$^{-3}$)')
 
 plt.legend()
 

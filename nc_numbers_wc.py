@@ -1,4 +1,6 @@
 ## this script gets SD / mean / max / min of nc data set + write to csv
+## have remembered that mixing ratio --> water content
+## number conc in n/cc
 
 import numpy as np
 import scipy.interpolate as sci
@@ -51,8 +53,12 @@ def calc(q,list):
 for key in nc_dic:
     key_list =[]
     nc = nc_dic[key]
+    pr = nc['p'][:,:]
+    temp = nc['t'][:,:]
+    rho = pr/(287*temp) # density
     for i in q_mix_rat: ##( we want to make --> g/kg )
         q = (nc['q'][:,:,i])*1000 # g/kg
+        q = q * rho ## g/m3
         q[q == 0] = np.nan ## we want to get mean mixing ratio of just cloud, not empty space
         key_list = calc(q,key_list)
 
@@ -77,7 +83,7 @@ for i in range(len(nc_files)):
     name = nc_files[i]
     collated_data.insert(i,name,new_nc_values[name])
 
-collated_data.to_csv('/home/ezri/scm_output/nc_numbers2.csv', mode='w')
+collated_data.to_csv('/home/ezri/scm_output/nc_numbers_wc.csv', mode='w')
 
 ## close netcdf files 
 for key in nc_dic:

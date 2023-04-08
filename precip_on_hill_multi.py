@@ -8,13 +8,18 @@ import getpass
 import matplotlib.pyplot as plt
 
 #### rate or cumulative? ## ########
-plot = 'cumulative' #cumulative / rate   #
+plot = 'rate' #cumulative / rate   #
 ####################################
 
 file_loc = '/home/ezri/scm_output/no_theta/'
 #nc_files = ['baseline','no_SIP','no_wr','bam_m_2']
-nc_files = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
+#nc_files = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
 #nc_files = ['baseline','no_SIP','no_wr','bam_m_2','INP_1','INP_2','warm_seed_2','warm_seed_3']
+
+
+nc_files =  ['baseline','INP_1','INP_2','hygro_1','hygro_2']
+names = ['Control', 'INP 1', 'INP 2', 'Hygro 1','Hygro 2']
+
 
 ## this opens up all the netcdf files interested in --> one dic
 nc_dic = {}
@@ -96,11 +101,12 @@ plt.yscale('log')
 #plt.ylim(0,0.5)
 plt.xlim(0,35)
 
+x = 0 
 if plot == 'cumulative':
     for key in cumulative_d:
         time = nc_dic[key]['time'][:]*u/1000.
-        plt.plot(time, cumulative_d[key], label=key)
-
+        plt.plot(time, cumulative_d[key], label=names[x])
+        x += 1
     plt.xlabel('distance (km)')
     plt.ylabel('Precipitation total (mm)')
 
@@ -108,7 +114,8 @@ if plot == 'cumulative':
 else:
     for key in rate_d:
         time = nc_dic[key]['time'][:]*u/1000.
-        plt.plot(time, rate_d[key], label=key)
+        plt.plot(time, rate_d[key], label=names[x])
+        x+= 1
 
     plt.xlabel('distance (km)')
     plt.ylabel('Precipitation rate (mm/hr)')
