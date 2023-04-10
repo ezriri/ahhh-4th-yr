@@ -8,16 +8,16 @@ import getpass
 import matplotlib.pyplot as plt
 
 #### rate or cumulative? ## ########
-plot = 'rate' #cumulative / rate   #
+plot = 'cumulative' #cumulative / rate   #
 ####################################
 
 file_loc = '/home/ezri/scm_output/no_theta/'
 #nc_files = ['baseline','no_SIP','no_wr','bam_m_2']
-#nc_files = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
+nc_files = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
 #nc_files = ['baseline','no_SIP','no_wr','bam_m_2','INP_1','INP_2','warm_seed_2','warm_seed_3']
 
 
-nc_files =  ['baseline','INP_1','INP_2','hygro_1','hygro_2']
+#nc_files =  ['baseline','INP_1','INP_2','hygro_1','hygro_2']
 names = ['Control', 'INP 1', 'INP 2', 'Hygro 1','Hygro 2']
 
 
@@ -97,9 +97,10 @@ for key in nc_dic:
     cumulative_d[key] = cumulative
 
 fig=plt.figure()
-plt.yscale('log')
+#plt.yscale('log')
 #plt.ylim(0,0.5)
-plt.xlim(0,35)
+#plt.xlim(0,35)
+plt.xlim(0,10)
 
 x = 0 
 if plot == 'cumulative':
