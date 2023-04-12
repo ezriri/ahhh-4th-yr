@@ -52,10 +52,10 @@ def water_cont(dic):
     mx_num = [15,23,31]
     wc_dic = {}
     new_keys = []
-    for key in dic:
+    for key in dic:  ## each sim 
         inv_keys = []
         x = 0
-        for n in mx_num:
+        for n in mx_num: ## each q variable
             inv_keys.append(key+mx[x])
             pr = dic[key]['p'][:,:]
             temp = dic[key]['t'][:,:]
@@ -66,7 +66,7 @@ def water_cont(dic):
             wc_dic[key+mx[x]] = mean
             x += 1
         new_keys.append(inv_keys)
-    return dic, new_keys
+    return wc_dic, new_keys
 # keys = [['b_cloud','b_rain','b_ice'],[no_SIP_cloud, no_SIP_rain,no_SIP,ice] etc]
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -83,7 +83,7 @@ n = 0
 for ax in range(3):
     for i in range(len(nc_files)):
         time = nc_dic[nc_files[i]]['time'][:]*u/1000.
-        axs[ax].plot(time,wc_dic[i][ax],color = line_colours[i], label = names)
+        axs[ax].plot(time,wc_dic[key_names[i][ax]],color = line_colours[i], label = names[i])
 
     axs[ax].set_xlim(0,30)
     axs[ax].set_ylabel(y_label[ax])

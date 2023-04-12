@@ -10,7 +10,9 @@ rain = (nc['q'][:,:,15])*1000
 
 q = nc['t'][:,:]
 ## [time, level]
-print(q[1,10])
+print(q[1,20])
+
+##       20 = 2km height
 
 #z=nc['z'][:]
 #print(len(z))
