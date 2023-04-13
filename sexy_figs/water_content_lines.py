@@ -87,8 +87,9 @@ for ax in range(3):
 
     axs[ax].set_xlim(0,30)
     axs[ax].set_ylabel(y_label[ax])
-    axs[ax].text(-0.2,1,abc_lab[ax],fontsize=12,transform=axs[ax].transAxes)
+    axs[ax].text(0.04,0.85,abc_lab[ax],fontsize=12,transform=axs[ax].transAxes)
 
+axs[0].legend(loc='upper right')
 
 for ax in axs.flat:
     ax.set(xlabel='Distance (km)')
