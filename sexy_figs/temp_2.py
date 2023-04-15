@@ -13,17 +13,19 @@ import matplotlib.pyplot as plt
 import matplotlib.pylab as pl
 
 nc = Dataset('/home/ezri/scm_output/no_theta/baseline.nc')
+#nc = Dataset('/home/ezri/scm_output/no_theta/INP_1.nc')
 
 u =5 #m/s
 z=nc['z'][:]
 q=nc['q'][:,:,:]
 time=nc['time'][:]*u/1000.*60.
 var = nc['t'][:,:]
-cloud = (nc['q'][:,:,14])/1.e6
+cloud = nc['q'][:,:,14]
 
 #cloud[cloud == 0] = np.nan ## makes any 0 values nan --> overlay plot
 var = np.transpose(var)
-cloud =np.transpose(cloud)
+#cloud =np.transpose(cloud)
+m1=np.max(q[:,:,14]/1.e6)
 
 ## ~~~~~~~~~~~~~~~~~~~~ hill ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 tau=6000.
@@ -42,13 +44,15 @@ pgon=plt.Polygon(pgon,color='g',alpha=1)
 
 ## ~~~~~~~~~~~~~~~~~~~~ plot ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ## 
 # making special colourmaps --> for overlay (code is stolen)
-#cmap = pl.cm.Blues_r
-cmap = mpl.cm.get_cmap('Blues_r') ### idk doesn't seem to like it??
+cmap = pl.cm.Blues
 my_cmap = cmap(np.arange(cmap.N))
 my_cmap[:,-1] = np.linspace(0,1,cmap.N)
 my_cmap = ListedColormap(my_cmap)
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+##### font ##
+font = {'family': 'serif', 'size'   : 10} 
+mpl.rc('font', **font)
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 fig, ax = plt.subplots(figsize=(12,6))
 
@@ -56,11 +60,14 @@ ax.set_ylim((0,6))
 ax.set_xlim((0,30))
 ax.set_xlabel('distance (km)')
 ax.set_ylabel('z (km)')
-#temp_plt = plt.pcolormesh(time/60,z/1000.,var,cmap='coolwarm',shading='gouraud')
-cloud_plt = plt.pcolormesh(cloud/60,z/1000.,cloud,cmap= 'Blues_r' ,shading='gouraud')
-#cbar = plt.colorbar(temp_plt)
-#cbar.set_label('Temp (K)')
+temp_plt = plt.pcolormesh(time/60,z/1000.,var,cmap='Reds',shading='gouraud')
+cloud_plt = plt.pcolormesh(time/60,z/1000.,cloud.T/1.e6,vmin=0.0,cmap= my_cmap ,shading='gouraud')
+t_cbar = plt.colorbar(temp_plt)
+c_cbar = plt.colorbar(cloud_plt) #, ax = ax, location = 'left'
+t_cbar.set_label('Temp (K)')
+c_cbar.set_label('N$_{cloud}$')
 ax.add_patch(pgon)
+#plt.title('ctrl')
 
 
 plt.savefig('/home/ezri/scm_output/figs/hill_temp.png', bbox_inches='tight')

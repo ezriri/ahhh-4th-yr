@@ -4,6 +4,7 @@ from netCDF4 import Dataset
 import pandas as pd
 import os
 import getpass
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.lines as lines
 import matplotlib.patches as patches
@@ -15,6 +16,9 @@ from matplotlib.lines import Line2D
 data = 'main' ## sensitivity / main / all
 u = 5 ## windspeed
 ###############################################
+
+font = {'family': 'serif', 'size'   : 10} 
+mpl.rc('font', **font)
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#

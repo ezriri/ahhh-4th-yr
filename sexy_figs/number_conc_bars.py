@@ -4,6 +4,7 @@ from netCDF4 import Dataset
 import pandas as pd
 import os
 import getpass
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.lines as lines
 import matplotlib.patches as patches
@@ -11,6 +12,8 @@ from matplotlib.patches import ConnectionPatch
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 
+font = {'family': 'serif', 'size'   : 10} 
+mpl.rc('font', **font)
 
 nc_num = pd.read_csv('/home/ezri/scm_output/og_runs_numbers.csv')
 nc_per = pd.read_csv('/home/ezri/scm_output/og_runs_per.csv')
@@ -81,5 +84,5 @@ ice_patch = patches.Patch(color='silver',hatch = 'o', label='Ice')
 # fancybox=True, shadow=True 
 ax.legend(handles=[cloud_patch,rain_patch,ice_patch], bbox_to_anchor=(0.5, 1.1), ncol =3,  loc = 'upper right',fancybox=True, shadow=True)
 plt.tight_layout()
-plt.savefig('/home/ezri/scm_output/figs/stacked_bars.png')
+plt.savefig('/home/ezri/scm_output/figs/nconc_sbars.png')
 

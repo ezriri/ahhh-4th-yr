@@ -4,6 +4,7 @@ from netCDF4 import Dataset
 import pandas as pd
 import os
 import getpass
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.lines as lines
 import matplotlib.patches as patches
@@ -15,6 +16,9 @@ from matplotlib.lines import Line2D
 nc_num = pd.read_csv('/home/ezri/scm_output/og_runs_numbers.csv')
 nc_per = pd.read_csv('/home/ezri/scm_output/og_runs_per.csv')
 nc_names = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
+
+font = {'family': 'serif', 'size'   : 10} 
+mpl.rc('font', **font)
 
 #files =  ['ctrl','INP_1','INP_2','hygro_1','hygro_2']
 var = ('LWC','RWC','IWC')
