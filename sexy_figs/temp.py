@@ -39,6 +39,10 @@ pgon=plt.Polygon(pgon,color='g',alpha=1)
 
 fig, ax = plt.subplots(figsize=(12,6))
 
+ax.set_ylim((0,6))
+ax.set_xlim((0,30))
+ax.set_xlabel('distance (km)')
+ax.set_ylabel('z (km)')
 temp_plt = plt.pcolormesh(time/60,z/1000.,var,cmap='coolwarm',shading='gouraud')
 #cloud_plt = plt.pcolormesh(cloud/60,z/1000.,var,cmap='coolwarm',shading='gouraud')
 cbar = plt.colorbar(temp_plt)
