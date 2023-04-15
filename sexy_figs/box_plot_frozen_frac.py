@@ -13,6 +13,9 @@ from matplotlib.patches import ConnectionPatch
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 
+font = {'family': 'serif', 'size'   : 10} 
+mpl.rc('font', **font)
+
 main_data = pd.read_csv('/home/ezri/lab_things/processed/freeze_temps.csv')
 extra_info = pd.read_csv('/home/ezri/lab_things/processed/extra_info.csv')
     # palma is in row 1 / pure in row 2 ^^

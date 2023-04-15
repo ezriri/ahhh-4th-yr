@@ -66,7 +66,7 @@ for file in nc_names:
     wc_bars.append(sum(wc_list))
     conc_bars.append(sum(conc_bars))
 
-ax_wc_lab.bar(names,wc_bars, alpha = 0) ## this is to make the second axis
+#ax_wc_lab.bar(names,wc_bars, alpha = 0) ## this is to make the second axis
 
 i = 0
 for bar_lab, values in nc_dic.items():

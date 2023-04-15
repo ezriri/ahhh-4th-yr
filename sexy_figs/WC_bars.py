@@ -63,9 +63,9 @@ for bar_lab, values in nc_dic.items():
 ax.set_ylabel('Water content distribution (%)')
 ax_wc_lab.set_ylabel('Average water content (gm$^{-3}$)')
 
-cloud_patch = patches.Patch(color='skyblue',hatch ='\\' , label='Cloud')
-rain_patch = patches.Patch(color='royalblue', hatch ='x',label='Rain')
-ice_patch = patches.Patch(color='silver',hatch = 'o', label='Ice')
+cloud_patch = patches.Patch(color='skyblue',hatch ='\\' , label='LWC')
+rain_patch = patches.Patch(color='royalblue', hatch ='x',label='RWC')
+ice_patch = patches.Patch(color='silver',hatch = 'o', label='IWC')
 
 # fancybox=True, shadow=True 
 ax.legend(handles=[cloud_patch,rain_patch,ice_patch], bbox_to_anchor=(0.5, 1.1), ncol =3,  loc = 'upper right',fancybox=True, shadow=True)
