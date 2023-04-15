@@ -96,7 +96,7 @@ for ax in axs.flat:
     ax.label_outer()
 
 # print to a file
-plt.savefig('/home/ezri/scm_output/mx_line.png', bbox_inches='tight')
+plt.savefig('/home/ezri/scm_output/figs/mx_line.png', bbox_inches='tight')
 
 
 ## close netcdf files 

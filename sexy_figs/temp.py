@@ -39,12 +39,13 @@ pgon=plt.Polygon(pgon,color='g',alpha=1)
 
 fig, ax = plt.subplots(figsize=(12,6))
 
-data = plt.pcolormesh(time/60,z/1000.,var,cmap='Reds',shading='gouraud')
-cbar = plt.colorbar(data)
+temp_plt = plt.pcolormesh(time/60,z/1000.,var,cmap='coolwarm',shading='gouraud')
+#cloud_plt = plt.pcolormesh(cloud/60,z/1000.,var,cmap='coolwarm',shading='gouraud')
+cbar = plt.colorbar(temp_plt)
 cbar.set_label('Temp (K)')
 ax.add_patch(pgon)
 
 
-plt.savefig('/home/ezri/scm_output/scm_hill_plot.png', bbox_inches='tight')
+plt.savefig('/home/ezri/scm_output/figs/hill_temp.png', bbox_inches='tight')
 
 nc.close()
