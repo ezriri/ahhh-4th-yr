@@ -21,23 +21,20 @@ nc_names = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
 
 #files =  ['ctrl','INP_1','INP_2','hygro_1','hygro_2']
 var = ('LWC','RWC','IWC')
-var = ('cloud','rain','ice')
+#conc_var = ('N$_{cloud}$ (cm$^{-3}$)','N$_{rain}$ (cm$^{-3}$)','N$_{ice}$ (L$^{-1}$)')
 names = ('Control', 'INP 1', 'INP 2', 'Hygro 1','Hygro 2')
 stack_colours = ['skyblue', 'royalblue', 'silver'] ## correlate with different variables
 hatch_l = ['\\','x','o']
 
-# make dic of values - % water distribution, in relation to ctrl
-nc_dic_per = {}
-b = nc_num['baseline']
-ctrl_t = (b[0] + b[4] + b[8]) ## this is sum of baseline mix rat (to find %)
+nc_dic = {}
 
 x = 0 
 for j in range(0,9,4):
     list = []
     for file in nc_names:
         num = nc_num[file][j]
-        list.append((num/ctrl_t)*100) # % value of total mix ratio it takes up
-    nc_dic_per[var[x]] = list
+        list.append(num)
+    nc_dic[var[x]] = list
     x += 1
 ## have dictionary of 3 keys (cloud / rain / ice)
 ## that has list of values for percentage - for stacked bar
@@ -45,7 +42,7 @@ for j in range(0,9,4):
 
 fig, ax = plt.subplots()
 bottom = np.zeros(5)
-ax_wc_lab = ax.twinx()
+#ax_wc_lab = ax.twinx()
 
 wc = [0,4,8]
 conc = [12,16,20]
@@ -75,11 +72,11 @@ for bar_lab, values in nc_dic.items():
      i += 1
 
 ax.set_ylabel('Water content distribution (%)')
-ax_wc_lab.set_ylabel('Average water content (gm$^{-3}$)')
+#ax_wc_lab.set_ylabel('Average water content (gm$^{-3}$)')
 
-cloud_patch = patches.Patch(color='skyblue',hatch ='\\' , label='Cloud')
-rain_patch = patches.Patch(color='royalblue', hatch ='x',label='Rain')
-ice_patch = patches.Patch(color='silver',hatch = 'o', label='Ice')
+cloud_patch = patches.Patch(color='skyblue',hatch ='\\' , label='N$_{cloud}$')
+rain_patch = patches.Patch(color='royalblue', hatch ='x',label='N$_{rain}$')
+ice_patch = patches.Patch(color='silver',hatch = 'o', label='N$_{ice}$')
 
 # fancybox=True, shadow=True 
 ax.legend(handles=[cloud_patch,rain_patch,ice_patch], bbox_to_anchor=(0.5, 1.1), ncol =3,  loc = 'upper right',fancybox=True, shadow=True)
