@@ -28,11 +28,14 @@ hatch_l = ['\\','x','o']
 
 nc_dic = {}
 
+wc = [0,4,8]
+conc = [12,16,20]
+
 x = 0 
-for j in range(0,9,4):
+for j in range(3):
     list = []
     for file in nc_names:
-        num = nc_num[file][j]
+        num = nc_num[file][conc[j]]
         list.append(num)
     nc_dic[var[x]] = list
     x += 1
@@ -44,8 +47,7 @@ fig, ax = plt.subplots()
 bottom = np.zeros(5)
 #ax_wc_lab = ax.twinx()
 
-wc = [0,4,8]
-conc = [12,16,20]
+
 
 
 ### this wont work -- need to make new dic opening up csv file (currently %)
