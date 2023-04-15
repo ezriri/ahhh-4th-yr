@@ -24,7 +24,7 @@ stack_colours = ['skyblue', 'royalblue', 'silver'] ## correlate with different v
 hatch_l = ['\\','x','o']
 
 # make dic of values - % water distribution, in relation to ctrl
-nc_dic = {}
+nc_dic_per = {}
 b = nc_num['baseline']
 ctrl_t = (b[0] + b[4] + b[8]) ## this is sum of baseline mix rat (to find %)
 
@@ -34,7 +34,7 @@ for j in range(0,9,4):
     for file in nc_names:
         num = nc_num[file][j]
         list.append((num/ctrl_t)*100) # % value of total mix ratio it takes up
-    nc_dic[var[x]] = list
+    nc_dic_per[var[x]] = list
     x += 1
 ## have dictionary of 3 keys (cloud / rain / ice)
 ## that has list of values for percentage - for stacked bar
@@ -47,17 +47,23 @@ ax_wc_lab = ax.twinx()
 wc = [0,4,8]
 conc = [12,16,20]
 
+
+### this wont work -- need to make new dic opening up csv file (currently %)
 wc_bars = []
+conc_bars = []
 for file in nc_names:
     wc_list = []
     conc_list = []
     for j in range(3):
         w_n = nc_num[file][wc[j]]
-        wc_list.append(num)
-    other_bars.append(sum(list))
+        wc_list.append(w_n)
+        c_n = nc_num[file][conc[j]]
+        conc_bars.append(c_n)
 
-ax_wc_lab.bar(names,other_bars, alpha = 0)
+    wc_bars.append(sum(wc_list))
+    conc_bars.append(sum(conc_bars))
 
+ax_wc_lab.bar(names,wc_bars, alpha = 0) ## this is to make the second axis
 
 i = 0
 for bar_lab, values in nc_dic.items():
