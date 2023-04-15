@@ -19,11 +19,13 @@ z=nc['z'][:]
 q=nc['q'][:,:,:]
 time=nc['time'][:]*u/1000.*60.
 var = nc['t'][:,:]
-cloud = nc['q'][:,:,14]
+cloud = (nc['q'][:,:,14])/1.e6
+
 #cloud[cloud == 0] = np.nan ## makes any 0 values nan --> overlay plot
-
 var = np.transpose(var)
+cloud =np.transpose(cloud)
 
+## ~~~~~~~~~~~~~~~~~~~~ hill ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 tau=6000.
 rt=tau
 t=np.linspace(0,rt,100)
@@ -39,13 +41,14 @@ pgon[:,1]=hill
 pgon=plt.Polygon(pgon,color='g',alpha=1)
 
 ## ~~~~~~~~~~~~~~~~~~~~ plot ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ## 
-# making special colourmaps --> to overlay
-cmap = pl.cm.Blues_r
-my_cmap = cmap(np.arrange(cmap.N))
-my_cmap[:,-1] = np.linespace(0,1,cmap.N)
+# making special colourmaps --> for overlay (code is stolen)
+#cmap = pl.cm.Blues_r
+cmap = mpl.cm.get_cmap('Blues_r') ### idk doesn't seem to like it??
+my_cmap = cmap(np.arange(cmap.N))
+my_cmap[:,-1] = np.linspace(0,1,cmap.N)
 my_cmap = ListedColormap(my_cmap)
 
-##
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 fig, ax = plt.subplots(figsize=(12,6))
 
@@ -53,10 +56,10 @@ ax.set_ylim((0,6))
 ax.set_xlim((0,30))
 ax.set_xlabel('distance (km)')
 ax.set_ylabel('z (km)')
-temp_plt = plt.pcolormesh(time/60,z/1000.,var,cmap='coolwarm',shading='gouraud')
-cloud_plt = plt.pcolormesh(cloud/60,z/1000.,var,cmap=my_cmap,shading='gouraud')
-cbar = plt.colorbar(temp_plt)
-cbar.set_label('Temp (K)')
+#temp_plt = plt.pcolormesh(time/60,z/1000.,var,cmap='coolwarm',shading='gouraud')
+cloud_plt = plt.pcolormesh(cloud/60,z/1000.,cloud,cmap= 'Blues_r' ,shading='gouraud')
+#cbar = plt.colorbar(temp_plt)
+#cbar.set_label('Temp (K)')
 ax.add_patch(pgon)
 
 
