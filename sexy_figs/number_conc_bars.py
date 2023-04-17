@@ -48,9 +48,7 @@ bottom = np.zeros(5)
 #ax_wc_lab = ax.twinx()
 
 
-
-
-### this wont work -- need to make new dic opening up csv file (currently %)
+### this wont work -- need to make new dic opening up csv file
 wc_bars = []
 conc_bars = []
 for file in nc_names:
@@ -67,6 +65,9 @@ for file in nc_names:
 
 #ax_wc_lab.bar(names,wc_bars, alpha = 0) ## this is to make the second axis
 
+print(conc_bars)
+
+"""
 i = 0
 for bar_lab, values in nc_dic.items():
      ax.bar(names, values, label=bar_lab, bottom=bottom, color = stack_colours[i], hatch = hatch_l[i]) ## this is plottling the stacked bars interested in
@@ -84,4 +85,6 @@ ice_patch = patches.Patch(color='silver',hatch = 'o', label='N$_{ice}$')
 ax.legend(handles=[cloud_patch,rain_patch,ice_patch], bbox_to_anchor=(0.5, 1.1), ncol =3,  loc = 'upper right',fancybox=True, shadow=True)
 plt.tight_layout()
 plt.savefig('/home/ezri/scm_output/figs/nconc_sbars.png')
+"""
+
 
