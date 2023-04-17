@@ -26,16 +26,9 @@ names = ['Control', 'INP 1', 'INP 2', 'Hygro 1','Hygro 2']
 stack_colours = ['skyblue', 'royalblue', 'silver'] ## correlate with different variables
 hatch_l = ['\\','x','o']
 
-
-## dic of 3 different number concs 
-cl = []
-ra = []
-ic = []
-
-c_dic_n = ['cloud','rain','ice']
-sd_na = ['c_sd','r_sd','i_sd']
+dic_n = ['cloud','rain','ice']
 conc_dic = {'cloud':[],'rain':[],'ice':[]}
-sd_dic = {'c_sd':[],'r_sd':[],'i_sd':[]}
+sd_dic = {'cloud':[],'rain':[],'ice':[]}
 conc = [12,16,20]
 conc_sd = [15,19,23]
 
@@ -43,11 +36,11 @@ conc_sd = [15,19,23]
 # go through each file (ctrl / inp 1 etc), then loop through each conc + add to dic (also make dic of SD)
 for file in nc_names:
     for j in range(3):
-        sd_dic[sd_na[j]].append(nc_num[file][conc_sd[j]])
+        sd_dic[dic_n[j]].append(nc_num[file][conc_sd[j]])
         if conc[j] == 20:
-            conc_dic[c_dic_n[j]].append(nc_num[file][conc[j]]*1000) ## just ice is put into L-1  
+            conc_dic[dic_n[j]].append(nc_num[file][conc[j]]*1000) ## just ice is put into L-1  
         else:
-            conc_dic[c_dic_n[j]].append(nc_num[file][conc[j]]) ## in cc
+            conc_dic[dic_n[j]].append(nc_num[file][conc[j]]) ## in cc
 
     #cl.append(nc_num[file][12]) # per cc
     #ra.append(nc_num[file][16]) # per cc
@@ -67,19 +60,32 @@ x = np.arange(len(names))
 width = 0.25
 multiplier = 0 
 
-for j in range(len(nc_names)):
+for attribute, measurement in conc_dic.items():
     offset = width * multiplier
-    if j == 3:
 
+#attribute = cloud / rain / ice
+#measurement = [5 x cloud numbers] , [5 x rain numbers], [5 x ice numbers]
+b_colour = ['skyblue', 'royalblue','silver']
 
+#c = 0
 for attribute, measurement in conc_dic.items():
     offset = width * multiplier 
+    ## this is to make sure plot on right axis
+    if attribute == 'ice':
+        ax = ax_ice
+    else:
+        ax = ax
+    ### 
+    bars = ax.bar(x+offset,measurement,width, label = attribute, color=b_colour[multiplier])
+    """
+    bars
     if attribute == 'N$_{Ice}$':
         bars = ax_ice.bar(x+offset,measurement,width, label = attribute, color='silver') ## want to make sure ice has seperate axis
     elif attribute == 'N$_{Rain}$':
         bars = ax.bar(x+offset,measurement,width, label = attribute, color='royalblue') # rain
     else:
         bars = ax.bar(x+offset,measurement,width, label = attribute, color='skyblue') # cloud
+    """
     multiplier += 1
  
 
