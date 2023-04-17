@@ -36,11 +36,17 @@ conc_sd = [15,19,23]
 # go through each file (ctrl / inp 1 etc), then loop through each conc + add to dic (also make dic of SD)
 for file in nc_names:
     for j in range(3):
-        sd_dic[dic_n[j]].append(nc_num[file][conc_sd[j]])
+        #sd_dic[dic_n[j]].append(nc_num[file][conc_sd[j]])
         if conc[j] == 20:
-            conc_dic[dic_n[j]].append(nc_num[file][conc[j]]*1000) ## just ice is put into L-1  
+            conc_dic[dic_n[j]].append(nc_num[file][conc[j]]*1000) ## just ice is put into L-1
+            sd_dic[dic_n[j]].append(nc_num[file][conc_sd[j]]*1000)  
         else:
             conc_dic[dic_n[j]].append(nc_num[file][conc[j]]) ## in cc
+            sd_dic[dic_n[j]].append(nc_num[file][conc_sd[j]])
+
+
+
+print(sd_dic)
 
 
 fig, ax = plt.subplots()
@@ -61,11 +67,11 @@ for attribute, measurement in conc_dic.items():
     offset = width * multiplier 
     ## this is to make sure plot on right axis
     if attribute == 'ice':
-        ax = ax_ice
+        axs = ax_ice
     else:
-        ax = ax
+        axs = ax
     ### 
-    bars = ax.bar(x+offset,measurement,width, label = attribute, xerr= sd_dic[attribute], color=b_colour[multiplier])
+    bars = axs.bar(x+offset,measurement,width, label = attribute, yerr= sd_dic[attribute],error_kw=dict(alpha=0.5, capsize=5,capthick=1), color=b_colour[multiplier])
     multiplier += 1
  
 
@@ -75,16 +81,6 @@ ax.set_ylabel('Cloud and Rain concentration (cm$^{-3}$)')
 ax_ice.set_ylabel('Ice concentration (L$^{-1}$)')
 ax.legend(loc='upper right')
 
-"""
-i = 0
-for bar_lab, values in nc_dic.items():
-     ax.bar(names, values, label=bar_lab, bottom=bottom, color = stack_colours[i], hatch = hatch_l[i]) ## this is plottling the stacked bars interested in
-     bottom += values
-     i += 1
-
-ax.set_ylabel('Water content distribution (%)')
-#ax_wc_lab.set_ylabel('Average water content (gm$^{-3}$)')
-"""
 cloud_patch = patches.Patch(color='skyblue', label='N$_{cloud}$')
 rain_patch = patches.Patch(color='royalblue',label='N$_{rain}$')
 ice_patch = patches.Patch(color='silver', label='N$_{ice}$')
