@@ -42,14 +42,6 @@ for file in nc_names:
         else:
             conc_dic[dic_n[j]].append(nc_num[file][conc[j]]) ## in cc
 
-    #cl.append(nc_num[file][12]) # per cc
-    #ra.append(nc_num[file][16]) # per cc
-    #ic.append(nc_num[file][20]*1000) # per L
-
-#conc_dic = {'cloud':cl,'rain':ra,'ice':ic}   # each key --> all values of each run
-#conc_dic = {'N$_{Cloud}$':cl,'N$_{Rain}$':ra,'N$_{Ice}$':ic} 
-
-#print(conc_dic)
 
 fig, ax = plt.subplots()
 ax_ice = ax.twinx() # need differnt axis for ice conc
@@ -59,9 +51,6 @@ ax.set_yscale('log')
 x = np.arange(len(names))
 width = 0.25
 multiplier = 0 
-
-for attribute, measurement in conc_dic.items():
-    offset = width * multiplier
 
 #attribute = cloud / rain / ice
 #measurement = [5 x cloud numbers] , [5 x rain numbers], [5 x ice numbers]
@@ -76,16 +65,7 @@ for attribute, measurement in conc_dic.items():
     else:
         ax = ax
     ### 
-    bars = ax.bar(x+offset,measurement,width, label = attribute, color=b_colour[multiplier])
-    """
-    bars
-    if attribute == 'N$_{Ice}$':
-        bars = ax_ice.bar(x+offset,measurement,width, label = attribute, color='silver') ## want to make sure ice has seperate axis
-    elif attribute == 'N$_{Rain}$':
-        bars = ax.bar(x+offset,measurement,width, label = attribute, color='royalblue') # rain
-    else:
-        bars = ax.bar(x+offset,measurement,width, label = attribute, color='skyblue') # cloud
-    """
+    bars = ax.bar(x+offset,measurement,width, label = attribute, xerr= sd_dic[attribute], color=b_colour[multiplier])
     multiplier += 1
  
 
