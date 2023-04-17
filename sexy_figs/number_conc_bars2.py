@@ -43,12 +43,11 @@ conc_sd = [15,19,23]
 # go through each file (ctrl / inp 1 etc), then loop through each conc + add to dic (also make dic of SD)
 for file in nc_names:
     for j in range(3):
+        sd_dic[sd_na[j]].append(nc_num[file][conc_sd[j]])
         if conc[j] == 20:
-            conc_dic[c_dic_n[j]].append(nc_num[file][conc[j]]*1000) ## just ice is put into L-1
-            sd_dic[sd_na[j]].append(nc_num[file][conc_sd[j]])
+            conc_dic[c_dic_n[j]].append(nc_num[file][conc[j]]*1000) ## just ice is put into L-1  
         else:
-            conc_dic[c_dic_n[j].append(nc_num[file][conc[j]]) ## in cc
-            sd_dic[sd_na[j]].append(nc_num[file][conc_sd[j]])
+            conc_dic[c_dic_n[j]].append(nc_num[file][conc[j]]) ## in cc
 
     #cl.append(nc_num[file][12]) # per cc
     #ra.append(nc_num[file][16]) # per cc
@@ -57,7 +56,7 @@ for file in nc_names:
 #conc_dic = {'cloud':cl,'rain':ra,'ice':ic}   # each key --> all values of each run
 #conc_dic = {'N$_{Cloud}$':cl,'N$_{Rain}$':ra,'N$_{Ice}$':ic} 
 
-print(conc_dic)
+#print(conc_dic)
 
 fig, ax = plt.subplots()
 ax_ice = ax.twinx() # need differnt axis for ice conc
@@ -67,6 +66,11 @@ ax.set_yscale('log')
 x = np.arange(len(names))
 width = 0.25
 multiplier = 0 
+
+for j in range(len(nc_names)):
+    offset = width * multiplier
+    if j == 3:
+
 
 for attribute, measurement in conc_dic.items():
     offset = width * multiplier 
@@ -78,6 +82,7 @@ for attribute, measurement in conc_dic.items():
         bars = ax.bar(x+offset,measurement,width, label = attribute, color='skyblue') # cloud
     multiplier += 1
  
+
 ax.set_xticks(x+width) # set location of x tick
 ax.set_xticklabels(names) # set names of x ticks
 ax.set_ylabel('Cloud and Rain concentration (cm$^{-3}$)')
