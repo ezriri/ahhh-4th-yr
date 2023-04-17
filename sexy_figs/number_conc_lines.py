@@ -89,11 +89,13 @@ for ax in range(3):
         time = nc_dic[nc_files[i]]['time'][:]*u/1000.
         axs[ax].plot(time,wc_dic[key_names[i][ax]],color = line_colours[i], label = names[i])
 
+    axs[ax].set_yscale('log')
     axs[ax].set_xlim(0,30)
     axs[ax].set_ylabel(y_label[ax])
     axs[ax].text(-0.1,1,abc_lab[ax],fontsize=12,transform=axs[ax].transAxes)
+    
 
-axs[0].legend(loc='upper right')
+#axs[0].legend(loc='upper right')
 
 for ax in axs.flat:
     ax.set(xlabel='Distance (km)')

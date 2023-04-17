@@ -6,15 +6,18 @@ from netCDF4 import Dataset
 import os
 import getpass
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 
+font = {'family': 'serif', 'size'   : 10} 
+mpl.rc('font', **font)
 
 file_loc = '/home/ezri/scm_output/no_theta/'
 #nc_files = ['baseline','no_SIP','no_wr','bam_m_2']
+#line_colours = ['black','forestgreen','darkmagenta']
+
 nc_files = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
-#nc_files = ['baseline','no_SIP','no_wr','bam_m_2','INP_1','INP_2','warm_seed_2','warm_seed_3']
-
 names = ['Control', 'INP 1', 'INP 2', 'Hygro 1','Hygro 2']
-
+line_colours = ['black','turquoise','royalblue','firebrick','coral']
 
 ## this opens up all the netcdf files interested in --> one dic
 nc_dic = {}
@@ -93,17 +96,20 @@ fig, axs = plt.subplots(2,1) ## this is for 2 subplots
 #plt.yscale('log')
 #plt.ylim(0,0.5)
 #plt.xlim(0,35)
-axs[0].xlim(0,10)
-axs[1].xlim(0,10)
+
+
 
 x = 0 
 for key in cumulative_d:
     time = nc_dic[key]['time'][:]*u/1000. 
-    axs[0].plot(time, cumulative_d[key], label=names[x])
-    axs[1].plot(time, rate_d[key], label=names[x])
+    axs[0].plot(time, cumulative_d[key], label=names[x], color = line_colours[x])
+    axs[1].plot(time, rate_d[key], label=names[x], color = line_colours[x])
     x += 1
-axs[0].ylabel('Precipitation total (mm)')
-axs[1].ylabel('Precipitation rate (mm/hr)')
+
+lab = ('Precipitation total (mm)','Precipitation rate (mm/hr)')
+for i in range(2):
+    axs[i].set_xlim(4,9)
+    axs[i].set_ylabel(lab[i])
 
 for ax in axs.flat:
     ax.set(xlabel='Distance (km)')
