@@ -29,40 +29,35 @@ hatch_l = [None,'x','..']
 
 # make dic of values - % water distribution, in relation to ctrl
 nc_dic = {}
+wc_dic = {}
 b = nc_num['baseline']
 ctrl_t = (b[0] + b[4] + b[8]) ## this is sum of baseline mix rat (to find %)
 
 x = 0 
 for j in range(0,9,4):
-    list = []
+    list_per = []
+    list_wc = []
     for file in nc_names:
         num = nc_num[file][j]
-        list.append((num/ctrl_t)*100) # % value of total mix ratio it takes up
-    nc_dic[var[x]] = list
+        list_wc.append(num)
+        list_per.append((num/ctrl_t)*100) # % value of total mix ratio it takes up
+    nc_dic[var[x]] = list_per
+    wc_dic[var[x]] = list_wc
     x += 1
 ## have dictionary of 3 keys (cloud / rain / ice)
 ## that has list of values for percentage - for stacked bar
-
 
 fig, ax = plt.subplots()
 bottom = np.zeros(5)
 ax_wc_lab = ax.twinx()
 
-wc = [0,4,8]
-conc = [12,16,20]
 
-wc_bars = []
-other_bars = []
-for file in nc_names:
-    wc_list = []
-    conc_list = []
-    for j in range(3):
-        w_n = nc_num[file][wc[j]]
-        wc_list.append(num)
-    other_bars.append(sum(list))
-
-ax_wc_lab.bar(names,other_bars, alpha = 0)
-
+#ax_wc_lab.bar(names,other_bars, alpha = 0)
+i = 0
+for bar_lab, values in wc_dic.items():
+     ax_wc_lab.bar(names, values,alpha =0) ## this is plottling the stacked bars interested in
+     bottom += values
+     i += 1
 
 # , color = stack_colours[i]
 i = 0
