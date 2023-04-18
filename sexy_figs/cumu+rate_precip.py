@@ -97,8 +97,6 @@ fig, axs = plt.subplots(2,1) ## this is for 2 subplots
 #plt.ylim(0,0.5)
 #plt.xlim(0,35)
 
-
-
 x = 0 
 for key in cumulative_d:
     time = nc_dic[key]['time'][:]*u/1000. 

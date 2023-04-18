@@ -17,12 +17,6 @@ from matplotlib.lines import Line2D
 import matplotlib.gridspec as gridspec
 
 
-############ which data ?? ####################
-data = 'main' ## sensitivity / main / all
-u = 5 ## windspeed
-###############################################
-
-
 font = {'family': 'serif', 'size'   : 10} 
 mpl.rc('font', **font)
 
@@ -30,23 +24,12 @@ nc_num = pd.read_csv('/home/ezri/scm_output/og_runs_numbers.csv')
 nc_per = pd.read_csv('/home/ezri/scm_output/og_runs_per.csv')
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-if data == 'main':
-    nc_files = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
-    names = ['Control', 'INP 1', 'INP 2', 'Hygro 1','Hygro 2']
-    line_colours = ['black','turquoise','royalblue','firebrick','coral']
+u = 5 ## windspeed
+
+nc_files = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
+names = ['Control', 'INP 1', 'INP 2', 'Hygro 1','Hygro 2']
+line_colours = ['black','turquoise','royalblue','firebrick','coral']
     
-
-elif data == 'sensitivity':
-    nc_files = ['baseline','no_SIP','no_wr']
-    names = ['Control', 'No SIP', 'No WR']
-    line_colours = ['black','forestgreen','darkmagenta']
-
-
-else:
-    nc_files = ['baseline','no_SIP','no_wr','INP_1','INP_2','warm_seed_2','warm_seed_3']
-    names = ['Control', 'No SIP', 'No WR', 'INP 1', 'INP 2', 'Hygro 1','Hygro 2']
-    line_colours = ['black','forestgreen','darkmagenta','turquoise','royalblue','firebrick','coral']
-
 
 ## this opens up all the netcdf files interested in --> one dic
 file_loc = '/home/ezri/scm_output/no_theta/'
