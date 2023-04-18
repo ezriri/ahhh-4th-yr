@@ -128,7 +128,7 @@ abc_lab = ['a)','b)']
 rain_ax = (precip_ax,rate_ax)
 lab = ('Precip. total (mm)','Precip. rate (mm/hr)')
 for i in range(2):
-    rain_ax[i].set_xlim(0,30)
+    rain_ax[i].set_xlim(0,10)
     rain_ax[i].set_ylabel(lab[i])
     rain_ax[i].text(0.04,0.9,abc_lab[i],transform=rain_ax[i].transAxes, fontsize=12) 
 

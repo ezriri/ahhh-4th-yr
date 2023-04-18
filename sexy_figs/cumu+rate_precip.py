@@ -58,8 +58,8 @@ def precip(specif_nc):
     #SD = np.zeros(len(time))
     st_div = np.std(q[:])
     mean = np.mean(q[:])
-    upper = mean + sd*3
-    lower = mean - sd*3
+    upper = mean + st_div*3
+    lower = mean - st_div*3
     for i in range(len(time)):
         rain1[i]=f_interp_precip[i](hill1[i])
 	## adding in cleaning bit
@@ -95,21 +95,23 @@ x = 0
 for key in cumulative_d:
     time = nc_dic[key]['time'][:]*u/1000. 
     axs[0].plot(time, cumulative_d[key], label=names[x], color = line_colours[x])
-    axs[0].fill_between(time,cumulative_d[key]-sd_d[key],cumulative_d[key]+sd_d[key],color = line_colours[x],alpha=0.3)
+    #axs[0].fill_between(time,cumulative_d[key]-sd_d[key],cumulative_d[key]+sd_d[key],color = line_colours[x],alpha=0.1) ##### oi oi oi this is for plotting SD in cumulative 
     axs[1].plot(time, rate_d[key], label=names[x], color = line_colours[x])
     x += 1
 
-lab = ('Precipitation total (mm)','Precipitation rate (mm/hr)')
+lab = ('Precip. total (mm)','Precip. rate (mm/hr)')
+abc_lab = ['a)','b)']
 for i in range(2):
-    axs[i].set_xlim(0,30)
+    axs[i].set_xlim(0,10)
     axs[i].set_ylabel(lab[i])
+    axs[i].text(0.04,0.85,abc_lab[i],transform=axs[i].transAxes, fontsize=12)
 
 for ax in axs.flat:
     ax.set(xlabel='Distance (km)')
     ax.label_outer()
    
-axs[0].legend(loc = 'upper right')
-
+axs[1].legend(fancybox=True, shadow=True, loc = 'upper left', bbox_to_anchor=(0.1,1.2))
+plt.tight_layout()
 plt.savefig('/home/ezri/scm_output/figs/precips.png', bbox_inches='tight')
 
 ## close netcdf files 
