@@ -50,6 +50,7 @@ for file in nc_files:
     data = file_loc + file + '.nc'
     nc_dic[file]= Dataset(data)
 
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # function to make water content --> right unit (new set of keys for new dic)
 # nc data is in 1 d 
@@ -81,7 +82,7 @@ def water_cont(dic):
 var = ('cloud','rain','ice')
 hatch_l = [None,'x','..']
 
-nc_dic = {}
+nc_dic_2 = {}
 b = nc_num['baseline']
 ctrl_t = (b[0] + b[4] + b[8]) ## this is sum of baseline mix rat (to find %)
 
@@ -91,7 +92,7 @@ for j in range(0,9,4):
     for file in nc_files:
         num = nc_num[file][j]
         list.append((num/ctrl_t)*100) # % value of total mix ratio it takes up
-    nc_dic[var[x]] = list
+    nc_dic_2[var[x]] = list
     x += 1
 
 wc = [0,4,8]
@@ -116,7 +117,7 @@ abc_lab = ['a)','b)','c)']
 
 ##  make a graph
 #fig, axs = plt.subplots(3,1,figsize=(5, 7))
-fig, axd = plt.subplot_mosaic([['LWC', 'bars'], ['RWC', 'bars'],['IWC', 'bars']], constrained_layout=True, figsize=(8, 8))
+fig, axd = plt.subplot_mosaic([['LWC', 'bars'], ['RWC', 'bars'],['IWC', 'bars']], width_ratios=[2,1], constrained_layout=True, figsize=(8, 8))
 #plt.tight_layout() # 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -132,7 +133,7 @@ for ax in range(3):
 
     axd[mx_ax[ax]].set_xlim(0,30)
     axd[mx_ax[ax]].set_ylabel(y_label[ax])
-    axd[mx_ax[ax]].text(0.04,0.85,abc_lab[ax],fontsize=12,transform=axs[ax].transAxes)
+    axd[mx_ax[ax]].text(0.04,0.85,abc_lab[ax],fontsize=12,transform=axd[mx_ax[ax]].transAxes)
 
 axd['LWC'].legend(loc='upper right')
 
@@ -149,7 +150,7 @@ ax_wc_lab.bar(names,other_bars, alpha = 0)
 
 # , color = stack_colours[i]
 i = 0
-for bar_lab, values in nc_dic.items():
+for bar_lab, values in nc_dic_2.items():
      axd['bars'].bar(names, values, label=bar_lab, bottom=bottom, fill=False, hatch = hatch_l[i]) ## this is plottling the stacked bars interested in
      bottom += values
      i += 1
