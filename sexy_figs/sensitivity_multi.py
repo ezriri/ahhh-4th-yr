@@ -117,19 +117,36 @@ for file in nc_files:
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 ### plot babe
-fig = plt.figure(figsize=(9,9))
+fig = plt.figure(figsize=(12,9))
 
 ## precip first
-precip_ax = plt.subplot2grid((2,3),(0,0),colspan=2, rowspan = 2)
+#precip_ax = plt.subplot2grid((2,3),(0,0),colspan=2, rowspan = 2)
+precip_ax = plt.subplot2grid((2,3),(0,0),colspan=2)
+rate_ax = plt.subplot2grid((2,3),(1,0),colspan=2)
+
+abc_lab = ['a)','b)']
+rain_ax = (precip_ax,rate_ax)
+lab = ('Precip. total (mm)','Precip. rate (mm/hr)')
+for i in range(2):
+    rain_ax[i].set_xlim(0,30)
+    rain_ax[i].set_ylabel(lab[i])
+    rain_ax[i].text(0.04,0.9,abc_lab[i],transform=rain_ax[i].transAxes, fontsize=12) 
+
+precip_ax.axes.xaxis.set_ticklabels([]) ## get rid of x tick lables
+rate_ax.set_xlabel('Distance (km)')
 
 x = 0 
 for key in cumulative_d:
     time = nc_dic[key]['time'][:]*u/1000. 
     precip_ax.plot(time, cumulative_d[key], label=names[x], color = line_colours[x])
+    rate_ax.plot(time, rate_d[key], label=names[x], color = line_colours[x])
     x += 1
-precip_ax.set_xlim(0,30)
-precip_ax.set_ylabel('Precip. total (mm)')
-precip_ax.set_xlabel('Distance (km)')
+
+
+#precip_ax.set_xlim(0,30)
+#precip_ax.set_ylabel('Precip. total (mm)')
+#precip_ax.set_xlabel('Distance (km)')
+rate_ax.legend(fancybox=True, shadow=True,loc="upper right", bbox_to_anchor=(0.9,1.1))
 
 ## now mix ratio #################################################
 mx_ax = plt.subplot2grid((2,3),(0,2))
@@ -141,7 +158,7 @@ hatch_l = [None,'x','..']
 
 for attribute, measurement in mix_dic.items():
     offset = width * multiplier
-    bars = mx_ax.bar(x+offset,measurement,width, label = attribute, hatch=hatch_l[multiplier])
+    bars = mx_ax.bar(x+offset,measurement,width, label = attribute, fill=False,hatch=hatch_l[multiplier])
     multiplier += 1
 
 mx_ax.set_xticks(x+width) # set location of x tick
@@ -152,13 +169,24 @@ cloud_patch = patches.Patch(fill=False, label='LWC')
 rain_patch = patches.Patch(hatch ='xx',fill=False, label='RWC')
 ice_patch = patches.Patch(hatch = '..',fill=False, label='IWC')
 
-mx_ax.legend(handles=[cloud_patch,rain_patch,ice_patch], ncol =3, loc = 'upper right',fancybox=True, shadow=True) # bbox_to_anchor=(0.95, 1.1),
+mx_ax.legend(handles=[cloud_patch,rain_patch,ice_patch],loc="upper center", bbox_to_anchor=(0.5,1.1), ncol =3,fancybox=True, shadow=True) # bbox_to_anchor=(0.95, 1.1),, bbox_to_anchor=(1, 1.1)
 
 ## now number conc ##########################################
-mx_ax = plt.subplot2grid((2,3),(1,2))
-ax_ice = mx_ax.twinx()
-ax_ice.set_yscale('log')
+conc_ax = plt.subplot2grid((2,3),(1,2))
+ax_ice = conc_ax.twinx()
+
+mx_ax.text(-0.2, 1,'c)',transform=mx_ax.transAxes, fontsize=12)
+conc_ax.text(-0.2,1,'d)',transform=conc_ax.transAxes, fontsize=12)
+
+conc_ax.set_yscale('log')
 mx_ax.set_yscale('log')
+
+ax_ice.xaxis.set_visible(False)
+conc_ax.set_xticks(x+width) # set location of x tick
+conc_ax.set_xticklabels(names) # set names of x ticks
+
+#conc_ax.invert_yaxis()
+#ax_ice.invert_yaxis()
 
 b_colour = ['skyblue', 'royalblue','silver']
 multiplier = 0
@@ -169,20 +197,21 @@ for attribute, measurement in conc_dic.items():
     if attribute == 'ice':
         axs = ax_ice
     else:
-        axs = mx_ax
+        axs = conc_ax
     ### 
     bars = axs.bar(x+offset,measurement,width, label = attribute, color=b_colour[multiplier])
     multiplier += 1
 
-mx_ax.set_xticks(x+width) # set location of x tick
-mx_ax.set_ylabel('Cloud and Rain concentration (cm$^{-3}$)')
+conc_ax.set_xticks(x+width) # set location of x tick
+conc_ax.set_ylabel('Cloud and Rain concentration (cm$^{-3}$)')
 ax_ice.set_ylabel('Ice concentration (L$^{-1}$)')
 
 cloud_patch = patches.Patch(color='skyblue', label='N$_{cloud}$')
 rain_patch = patches.Patch(color='royalblue',label='N$_{rain}$')
 ice_patch = patches.Patch(color='silver', label='N$_{ice}$')
 
-mx_ax.legend(handles=[cloud_patch,rain_patch,ice_patch], ncol =3,  loc = 'lower right',fancybox=True, shadow=True)
+conc_ax.legend(handles=[cloud_patch,rain_patch,ice_patch],loc="upper center", bbox_to_anchor=(0.5,1.1), ncol =3,fancybox=True, shadow=True)
+#conc_ax.legend(handles=[cloud_patch,rain_patch,ice_patch],loc="lower center", bbox_to_anchor=(0.5,-0.1), ncol =3,fancybox=True, shadow=True)#,  loc = 'lower right' , bbox_to_anchor=(1, -0.1)
 
 plt.tight_layout()
 plt.savefig('/home/ezri/scm_output/figs/sens_plot.png', bbox_inches='tight')
