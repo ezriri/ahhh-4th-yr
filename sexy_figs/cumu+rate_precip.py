@@ -50,21 +50,13 @@ def precip(specif_nc):
     f_interp_precip = []
     # create a 1-d interpolant for precipitation field for every time level
     for i in range(len(time)):
-    # this is z vs precip for every time level
         f_interp_precip.append(sci.interp1d(z,q[i,:],fill_value='extrapolate')) 
-
-    # we need to know the height of the hill on the time grid
-    # create the interpolant
     f_hill_interp = sci.interp1d(t[0:int(l1/2)],hill[0:int(l1/2)],fill_value='extrapolate')
 
-    # use interpolant
-    hill1 = np.maximum(f_hill_interp(time), 0.) # limit so can't go below ground as extrapolation sometimes does
-    
-    # now we have the interpolant, use it to get the precipitation on every time level on 
-    # the contour of the hill
+    hill1 = np.maximum(f_hill_interp(time), 0.)    
     rain1=np.zeros(len(time))
-    #print(f_hill_interp.ndim)
-    sd = np.std(q[:])
+    #SD = np.zeros(len(time))
+    st_div = np.std(q[:])
     mean = np.mean(q[:])
     upper = mean + sd*3
     lower = mean - sd*3
@@ -79,17 +71,19 @@ def precip(specif_nc):
     ## this bit is supposed to make all negative values = 0
     rain1[rain1<0] = 0
     cumulative = np.cumsum(rain1*dt/3600)
-    return rate, cumulative
+    return rate, cumulative, st_div
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 ## loop through all nc files to get rate + cumulative --> seperate dics
 rate_d = {}
 cumulative_d = {}
+sd_d = {}
 
 for key in nc_dic:
-    rate, cumulative = precip(nc_dic[key])
+    rate, cumulative, st_div = precip(nc_dic[key])
     rate_d[key]= rate
     cumulative_d[key] = cumulative
+    sd_d[key] = st_div
 
 
 fig, axs = plt.subplots(2,1) ## this is for 2 subplots
@@ -101,19 +95,20 @@ x = 0
 for key in cumulative_d:
     time = nc_dic[key]['time'][:]*u/1000. 
     axs[0].plot(time, cumulative_d[key], label=names[x], color = line_colours[x])
+    axs[0].fill_between(time,cumulative_d[key]-sd_d[key],cumulative_d[key]+sd_d[key],color = line_colours[x],alpha=0.3)
     axs[1].plot(time, rate_d[key], label=names[x], color = line_colours[x])
     x += 1
 
 lab = ('Precipitation total (mm)','Precipitation rate (mm/hr)')
 for i in range(2):
-    axs[i].set_xlim(4,9)
+    axs[i].set_xlim(0,30)
     axs[i].set_ylabel(lab[i])
 
 for ax in axs.flat:
     ax.set(xlabel='Distance (km)')
     ax.label_outer()
    
-axs[0].legend()
+axs[0].legend(loc = 'upper right')
 
 plt.savefig('/home/ezri/scm_output/figs/precips.png', bbox_inches='tight')
 
