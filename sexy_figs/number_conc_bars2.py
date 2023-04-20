@@ -22,7 +22,7 @@ nc_names = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
 #files =  ['ctrl','INP_1','INP_2','hygro_1','hygro_2']
 var = ('LWC','RWC','IWC')
 #conc_var = ('N$_{cloud}$ (cm$^{-3}$)','N$_{rain}$ (cm$^{-3}$)','N$_{ice}$ (L$^{-1}$)')
-names = ['Control', 'INP 1', 'INP 2', 'Hygro 1','Hygro 2']
+names = ['Control', 'Glacio 1', 'Glacio 2', 'Hygro 1','Hygro 2']
 stack_colours = ['skyblue', 'royalblue', 'silver'] ## correlate with different variables
 hatch_l = ['\\','x','o']
 

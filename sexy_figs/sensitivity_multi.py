@@ -175,8 +175,8 @@ mx_ax.legend(handles=[cloud_patch,rain_patch,ice_patch],loc="upper center", bbox
 conc_ax = plt.subplot2grid((2,3),(1,2))
 ax_ice = conc_ax.twinx()
 
-mx_ax.text(-0.2, 1,'c)',transform=mx_ax.transAxes, fontsize=12)
-conc_ax.text(-0.2,1,'d)',transform=conc_ax.transAxes, fontsize=12)
+mx_ax.text(0.05,0.9,'c)',transform=mx_ax.transAxes, fontsize=12)
+conc_ax.text(0.05,0.9,'d)',transform=conc_ax.transAxes, fontsize=12)
 
 conc_ax.set_yscale('log')
 mx_ax.set_yscale('log')

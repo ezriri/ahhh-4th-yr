@@ -27,7 +27,7 @@ nc_per = pd.read_csv('/home/ezri/scm_output/og_runs_per.csv')
 u = 5 ## windspeed
 
 nc_files = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
-names = ['Control', 'INP 1', 'INP 2', 'Hygro 1','Hygro 2']
+names =['Control', 'Glacio 1', 'Glacio 2', 'Hygro 1','Hygro 2']
 line_colours = ['black','turquoise','royalblue','firebrick','coral']
     
 

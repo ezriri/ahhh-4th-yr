@@ -16,7 +16,7 @@ file_loc = '/home/ezri/scm_output/no_theta/'
 #line_colours = ['black','forestgreen','darkmagenta']
 
 nc_files = ['baseline','INP_1','INP_2','warm_seed_2','warm_seed_3']
-names = ['Control', 'INP 1', 'INP 2', 'Hygro 1','Hygro 2']
+names = ['Control', 'Glacio 1', 'Glacio 2', 'Hygro 1','Hygro 2']
 line_colours = ['black','turquoise','royalblue','firebrick','coral']
 
 ## this opens up all the netcdf files interested in --> one dic

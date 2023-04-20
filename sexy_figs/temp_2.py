@@ -54,21 +54,25 @@ font = {'family': 'serif', 'size'   : 10}
 mpl.rc('font', **font)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-fig, ax = plt.subplots(figsize=(12,6))
+#fig, ax = plt.subplots(figsize=(12,6))
+fig = plt.figure(figsize=(12,6))
+ax = fig.add_subplot(111)
 
 ax.set_ylim((0,6))
 ax.set_xlim((0,30))
 ax.set_xlabel('distance (km)')
 ax.set_ylabel('z (km)')
-temp_plt = plt.pcolormesh(time/60,z/1000.,var,cmap='Reds',shading='gouraud')
-cloud_plt = plt.pcolormesh(time/60,z/1000.,cloud.T/1.e6,vmin=0.0,cmap= my_cmap ,shading='gouraud')
+temp_plt = ax.pcolormesh(time/60,z/1000.,var,cmap='Reds',shading='gouraud')
+cloud_plt = ax.pcolormesh(time/60,z/1000.,cloud.T/1.e6,vmin=0.0,cmap= my_cmap ,shading='gouraud')
 t_cbar = plt.colorbar(temp_plt)
-c_cbar = plt.colorbar(cloud_plt) #, ax = ax, location = 'left'
+#cax = divider.append_axes("left", size="5%", pad=0.05)
+c_cbar = plt.colorbar(cloud_plt) #,cax=ax) #, ax = ax, location = 'left'
 t_cbar.set_label('Temp (K)')
 c_cbar.set_label('N$_{cloud}$')
 ax.add_patch(pgon)
 #plt.title('ctrl')
 
+nc.close()
 
 plt.savefig('/home/ezri/scm_output/figs/hill_temp.png', bbox_inches='tight')
 
