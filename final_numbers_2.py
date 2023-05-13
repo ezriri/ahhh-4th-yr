@@ -12,6 +12,8 @@ import pandas as pd
 
 ## !! homemade function (paul wrote)
 from precip_on_hill_multi import precip
+save_name = '/home/ezri/scm_output/og_runs_30km_'
+
 ## !!
 
 # precip rate + cumulative will be here too
@@ -47,6 +49,8 @@ for num in all_var:
 ############################ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 new_nc_values = {} ## keys --> nc_files
 
+
+### added [:6,:] -- looking at first 6 sec - but 6*5 = 30 (hill portion of sim)
 def calc(q,list):
     list.append(np.nanmean(q))
     list.append(np.nanmax(q))
@@ -58,17 +62,17 @@ def calc(q,list):
 for key in nc_dic:
     key_list =[]
     nc = nc_dic[key]
-    pr = nc['p'][:,:]
-    temp = nc['t'][:,:]
+    pr = nc['p'][:6,:]
+    temp = nc['t'][:6,:]
     rho = pr/(287*temp) # density
     for i in q_mix_rat: ##( we want to make --> g/kg )
-        q = (nc['q'][:,:,i])*1000 # g/kg
+        q = (nc['q'][:6,:,i])*1000 # g/kg
         q = q * rho ## g/m3
         q[q == 0] = np.nan ## we want to get mean mixing ratio of just cloud, not empty space
         key_list = calc(q,key_list)
 
     for j in q_num_conc:
-        q = (nc['q'][:,:,j])/1.e6 ## n/cm3
+        q = (nc['q'][:6,:,j])/1.e6 ## n/cm3
         q[q == 0] = np.nan ## we want to get mean mixing ratio of just cloud, not empty space
         key_list = calc(q,key_list)
 
@@ -88,12 +92,12 @@ for i in range(len(nc_files)):
     name = nc_files[i]
     collated_data.insert(i,name,new_nc_values[name])
 
-collated_data.to_csv('/home/ezri/scm_output/og_runs_numbers.csv', mode='w')
+collated_data.to_csv(save_name+'numbers.csv', mode='w')
 
 
 #####################################################################
 # now do percentage change from control
-nu = pd.read_csv('/home/ezri/scm_output/og_runs_numbers.csv')
+nu = pd.read_csv(save_name+'numbers.csv')
 
 difference = {}
 percentage = {}
@@ -141,7 +145,7 @@ for i in range(len(nc_files_2)):
     name = nc_files_2[i]
     total_df.insert(i,name,total_dic[name])
 
-total_df.to_csv('/home/ezri/scm_output/og_runs_per.csv', mode='w')
+total_df.to_csv(save_name+'per.csv', mode='w')
 
 ## close netcdf files 
 for key in nc_dic:

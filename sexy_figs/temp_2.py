@@ -19,7 +19,7 @@ u =5 #m/s
 z=nc['z'][:]
 q=nc['q'][:,:,:]
 time=nc['time'][:]*u/1000.*60.
-var = nc['t'][:,:]
+var = (nc['t'][:,:]-273.15)
 cloud = nc['q'][:,:,14]
 
 #cloud[cloud == 0] = np.nan ## makes any 0 values nan --> overlay plot
@@ -67,12 +67,10 @@ cloud_plt = ax.pcolormesh(time/60,z/1000.,cloud.T/1.e6,vmin=0.0,cmap= my_cmap ,s
 t_cbar = plt.colorbar(temp_plt)
 #cax = divider.append_axes("left", size="5%", pad=0.05)
 c_cbar = plt.colorbar(cloud_plt) #,cax=ax) #, ax = ax, location = 'left'
-t_cbar.set_label('Temp (K)')
+t_cbar.set_label('Temp (\N{DEGREE SIGN}C)')
 c_cbar.set_label('N$_{cloud}$')
 ax.add_patch(pgon)
 #plt.title('ctrl')
-
-nc.close()
 
 plt.savefig('/home/ezri/scm_output/figs/hill_temp.png', bbox_inches='tight')
 

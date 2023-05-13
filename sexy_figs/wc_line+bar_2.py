@@ -44,6 +44,7 @@ for file in nc_files:
 # nc data is in 1 d 
 # pass the dic of nc files
 # 15 = cloud water mixing ratio // 23 = rain water mixing ratio // 31 = ice mixing ratio
+## also just added in make 0 values nan -- just in cloud values q[q == 0] = np.nan
 def water_cont(dic):
     mx = ['_cloud','_rain','_ice']
     mx_num = [15,23,31]
@@ -58,8 +59,9 @@ def water_cont(dic):
             temp = dic[key]['t'][:,:]
             rho = pr/(287*temp) # density
             b = dic[key]['q'][:,:,n]
+            b[b==0] = np.nan ############################# !!!! 
             new_unit = b*1000*rho # in g/m3
-            mean = np.mean(new_unit,axis=1)
+            mean = np.nanmean(new_unit,axis=1) ########## also changed to np.nanmean (from np.mean)
             wc_dic[key+mx[x]] = mean
             x += 1
         new_keys.append(inv_keys)

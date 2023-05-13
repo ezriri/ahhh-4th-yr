@@ -9,8 +9,9 @@ nc = Dataset('/home/ezri/scm_output/no_theta/baseline.nc')
 rain = (nc['q'][:,:,15])*1000
 
 q = nc['t'][:,:]
+print(q.shape)
 ## [time, level]
-print(q[1,20])
+#print(q[1,20])
 
 ##       20 = 2km height
 
