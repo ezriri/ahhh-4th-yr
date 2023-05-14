@@ -1,0 +1,62 @@
+ &run_vars
+	!outputfile = '/tmp/output.nc',
+	outputfile = '/home/ezri/scm_output/no_theta/baseline.nc',
+	runtime=72000.,
+!       runtime=6000.,
+	kp=100,
+	dz=100.,
+	dt=10.,
+	nq=5, ! number of q variables
+	nprec=1, ! number of precipitation variables
+	advection_scheme=3, ! 0=upstream, 1=bott, 2=mpdata from sub-tree, 3=mpdata sfvt
+	ord=8,		     ! order of advection for bott scheme (except precip)
+	halo=0,
+	monotone=.true.,    ! monotone advection (except precip)
+	microphysics_flag=3, ! flag for microphysics: 0 (no micro); 
+	                     ! 1 (bulk scheme #1); 2 (bulk scheme #2); 3 (bulk scheme #3)
+	ice_flag=.true.,    ! turn ice micro on / off
+	bam_nmlfile='pamm/bam/namelist_tenerife.in', ! filename of bam namelist
+	aero_nmlfile='pamm/namelist.in', ! filename of aerosol profile namelist
+	aero_prof_flag=.false., ! flag to read in a profile of aerosol
+	hm_flag=.true.,	     ! switch hm process on / off
+	wr_flag=.true.,	     ! switch warm rain process on / off
+	rm_flag=.true.,	     ! switch riming process on / off
+	mode1_ice_flag=1,           ! 0 is off; 1 is on - experimental
+	mode2_ice_flag=1,           ! 0 is off; 1 is on - experimental
+	coll_breakup_flag1=1,        ! 0 is off; 1 is on vardiman, 2 is phillips et al 2017 - experimental
+	heyms_west=.true.,          ! flag for new fall-speeds
+	theta_flag=.false.,  ! advect theta
+	drop_num_init=.true., ! only works for microphysics_flag=2
+	num_drop= 95.e6, ! initial number concentration of drops
+	ice_init=.false.,  ! only works for microphysics_flag=1
+	num_ice=1.,      ! number conc of primary ice crystals /kg
+	mass_ice=1.e-14,    ! mass of new ice crystal (kg)
+	updraft_type=2,
+	w_peak=1.9452,
+        t_thresh=5.0,
+        t_thresh2=6000.0/
+ &run_vars2
+    q_type = 0,1,1,2,2, ! the type of q-variable. 0 vapour, 1 mass, 2 number conc.
+    q_init =.true.,.false.,.false.,.false./ ! whether to initialise or now	
+ &sounding_spec  ! environmental sounding parameters
+ 	adiabatic_prof=.true.,
+ 	adiabatic_frac=0.5,
+!	adiabatic_frac=0.25,
+ 	psurf= 1.007146309e5,
+ 	tsurf=292.0645,
+ 	t_cbase=286.6312, ! this is using height
+ 	t_ctop=283.6451, ! this is using height
+! 	t_cbase=287.6445, ! this is using pressure - model doesn't like it
+! 	t_ctop=285.047, ! this is using pressure - model doesn't like it
+    n_levels_s = 33,
+!	q_read(1,1:3)   = 0.015, 0.0138, 0.0024,
+!	theta_read(1:3) = 297.9, 297.9, 312.66,
+	rh_read(1:3)    = 0.,0.,0.,
+!	z_read(1:3)     = 0.,740,3260/
+	q_read(1,1:33) = 0.01530538676884807, 0.013682538363550852, 0.01728028178777738, 0.015240028199842066, 0.013167764548337884, 0.011340815641828721, 0.006576131752292294, 0.005652650833551904, 0.004936662781637236, 0.004321287066571311, 0.00379272123364181, 0.0033213635624130193, 0.0029670764073145965, 0.0026017343206085177, 0.0023048690325170296, 0.002055163700016413, 0.0017991625995361984, 0.001589966039611768, 0.001405942293646819, 0.001213467557798051, 0.0010657361717433017, 0.0009161969692389171, 0.0007888459674481341, 0.0006742930163568968, 0.0005700107087000078, 0.00047178949362078706, 0.0003961426701052794, 0.00032778834962954816, 0.00027426375032447336, 0.00022726604421815095, 0.0001856648332977352, 0.00015283801342924085, 0.00012440555230639125,
+!	q_read(2,1:10) = 1.0, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0 1.0,
+!	q_read(3,1:10) = 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 1.0,
+!	q_read(4,1:10) = 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 1.0,
+	theta_read(1:33) = 297.8841921, 300.3741151, 302.8967953, 303.9314579, 305.0454017, 306.1862557, 307.2962297, 308.4725936, 309.6202099, 310.8242414, 311.9923596, 313.1829275, 314.3050256, 315.4091433, 316.5667878, 317.6600527, 318.723934, 319.8524181, 320.8806605, 321.9203851, 322.8748398, 323.8309323, 324.8212482, 325.7918139, 326.7722307, 327.8279443, 328.8194645, 329.8447329, 330.9423798, 332.1230092, 333.4145857, 334.7408984, 336.2287935,
+!	rh_read(1:10) = 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 1.0,
+	z_read(1:33) =0.0, 165.37547600000016, 336.7676020000001, 504.83598499999994, 682.079465, 866.470871, 1053.2269480000002, 1260.6170789999999, 1476.095521, 1701.417525, 1941.8994989999999, 2192.3920799999996, 2450.60934, 2718.907419, 3005.746129, 3288.7200390000007, 3585.3452480000005, 3888.051485, 4195.086878, 4505.036715, 4819.1379560000005, 5126.942677, 5462.327298, 5788.1407770000005, 6110.828633, 6458.890608000001, 6786.018926000001, 7115.552108, 7439.763127, 7769.565138, 8101.4927339999995, 8416.071406000001, 8746.706322/
